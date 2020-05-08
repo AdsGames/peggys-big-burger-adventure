@@ -7,7 +7,7 @@ public class Peggy : MonoBehaviour
 
     private GameObject head;
 
-    private float speed = 2;
+    private float speed = 10;
     private float rotation_speed = 2;
 
     public Rigidbody m_Rigidbody;
@@ -25,17 +25,18 @@ public class Peggy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!Input.GetKey(KeyCode.W))
+            m_Rigidbody.MovePosition(m_Rigidbody.position + transform.forward * -speed * Time.fixedDeltaTime);
 
-        m_Rigidbody.transform.Translate(Vector3.back * Time.deltaTime * speed);
 
-    
         if (Input.GetKey(KeyCode.A)){
                     Quaternion deltaRotation = Quaternion.Euler(m_EulerAngleVelocity * -Time.deltaTime);
                      m_Rigidbody.MoveRotation(m_Rigidbody.rotation * deltaRotation);
         }
-        if (Input.GetKey(KeyCode.S)){
-           
+        if (Input.GetKey(KeyCode.Space)){
+           m_Rigidbody.AddRelativeForce(new Vector3(0,100,0));
         }
+      
         if (Input.GetKey(KeyCode.D)){
             
         Quaternion deltaRotation = Quaternion.Euler(m_EulerAngleVelocity * Time.deltaTime);
