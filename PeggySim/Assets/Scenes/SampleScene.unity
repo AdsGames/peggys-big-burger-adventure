@@ -674,6 +674,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4a8665f4d3c6adaa85289b1776de653, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  turnSpeed: 0
+  moveSpeed: 30
+  movementReversed: 0
   m_Rigidbody: {fileID: 1154836632}
 --- !u!1 &1243869733
 GameObject:
@@ -1253,7 +1256,7 @@ GameObject:
   - component: {fileID: 2097714756}
   m_Layer: 0
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
