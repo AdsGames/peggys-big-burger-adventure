@@ -25,7 +25,7 @@ jobs:
     - name: Build Unity Project
       uses: webbertakken/unity-builder@v0.15
       with:
-        unityVersion: 2019.3.13f1
+        unityVersion: 2019.3.12f1
         targetPlatform: WebGL
         projectPath: PeggySim
         buildName: PeggySim
