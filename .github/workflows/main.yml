@@ -11,14 +11,26 @@ jobs:
     steps:
     - name: Checkout Code
       uses: actions/checkout@v2
+      with:
+        lfs: true
+
+    - uses: actions/cache@v1.1.0
+      with:
+        path: PeggySim/Library
+        key: Library-PeggySim-WebGL
+        restore-keys: |
+          Library-PeggySim-
+          Library-
 
     - name: Build Unity Project
       uses: webbertakken/unity-builder@v0.15
       with:
-        unityVersion: "2019.3.13f1"
-        targetPlatform: "Windows" 
-        projectPath: "PeggySim"
-        buildName: "PeggySim"
+        unityVersion: 2019.3.13f1
+        targetPlatform: WebGL
+        projectPath: PeggySim
+        buildName: PeggySim
 
-    - name: LS
-      run: ls -la
+    - uses: actions/upload-artifact@v1
+      with:
+        name: Build
+        path: build
