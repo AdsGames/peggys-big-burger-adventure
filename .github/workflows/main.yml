@@ -1,0 +1,24 @@
+name: Build Unity Project
+
+on:
+  push:
+    branches: test-build 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Build Unity Project
+      uses: webbertakken/unity-builder@v0.15
+      with:
+        unityVersion: "2019.3.13f1"
+        targetPlatform: "Windows" 
+        projectPath: "PeggySim"
+        buildName: "PeggySim"
+
+    - name: LS
+      run: ls -la
