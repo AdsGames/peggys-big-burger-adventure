@@ -11,10 +11,13 @@ public class Movement : MonoBehaviour
     public bool turningReversed;
     public float drag;
     public float angularDrag;
+    public float segmentFactor;
 
     public List<GameObject> wheels;
 
     private GameObject head;
+
+    private GameInfo info;
 
     public Rigidbody m_Rigidbody;
     Vector3 m_EulerAngleVelocity;
@@ -42,6 +45,8 @@ public class Movement : MonoBehaviour
                 wheels.Add(child.gameObject);
             }
         }
+
+        info = GameObject.FindGameObjectWithTag("GameInfo").GetComponent<GameInfo>();
     }
 
     // Update is called once per frame
@@ -69,7 +74,7 @@ public class Movement : MonoBehaviour
 
         if (onGround)
         {
-            m_Rigidbody.AddRelativeForce(new Vector3(0, 0, moveSpeed * (movementReversed ? 1 : -1)), ForceMode.Acceleration);
+            m_Rigidbody.AddRelativeForce(new Vector3(0, 0, moveSpeed * (movementReversed ? 1 : -1) * ((info.getSegments()* segmentFactor)+ 1)), ForceMode.Acceleration);
 
             if (Input.GetAxis("Horizontal") < 0)
             {
@@ -80,14 +85,12 @@ public class Movement : MonoBehaviour
                 m_Rigidbody.AddRelativeTorque(new Vector3(0, -turnSpeed * (turningReversed ? 1 : -1), 0), ForceMode.Acceleration);
             }
         }
+        Debug.Log(info.getSegments());
     }
     private void OnTriggerStay(Collider other)
     {
         if (other.tag == "Ground")
-        {
             onGround = true;
-            Debug.Log("boop");
-        }
     }
     private void OnTriggerExit(Collider other)
     {

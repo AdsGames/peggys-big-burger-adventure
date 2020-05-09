@@ -7,6 +7,9 @@ TagManager:
   - Ground
   - Head
   - Leg
+  - Segment
+  - GameInfo
+
   layers:
   - Default
   - TransparentFX
