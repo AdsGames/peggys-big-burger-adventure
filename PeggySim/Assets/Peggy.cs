@@ -13,6 +13,7 @@ public class Peggy : MonoBehaviour
 
     
     public Rigidbody m_Rigidbody;
+    public GameObject Food;
     Vector3 m_EulerAngleVelocity;
     // Start is called before the first frame update
     void Start()
@@ -28,6 +29,9 @@ public class Peggy : MonoBehaviour
         if(other.tag == "Food"){
             addSegment();
             Destroy(other);
+            float range = 25;
+            GameObject new_food = Instantiate(Food);
+            new_food.transform.position = new Vector3(Random.Range(-range,range),1,Random.Range(-range,range));
         }
     }
     void addSegment(){
