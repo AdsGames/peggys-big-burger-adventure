@@ -100,7 +100,7 @@ public class Movement : MonoBehaviour
             m_Rigidbody.angularDrag = 0;
 
         }
-        //Debug.Log(info.getSegments());
+        Debug.Log(info.getSegments());
     }
     private void OnTriggerStay(Collider other)
     {

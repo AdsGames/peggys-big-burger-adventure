@@ -4,26 +4,17 @@ using UnityEngine;
 
 public class Segment : MonoBehaviour
 {
-    public CapsuleCollider collider;
+    public HingeJoint joint;
 
     void Start()
     {
-        collider = GetComponent<CapsuleCollider>();
+       joint = GetComponent<HingeJoint>();
     }
 
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Segment" || collision.gameObject.tag == "Head")
-        {
-            Physics.IgnoreCollision(collision.collider, collider);
-        }
-
-    }
-    private void OnCollisionStay(Collision collision)
-    {
-        if (collision.gameObject.tag == "Segment" || collision.gameObject.tag == "Head")
-        {
-            Physics.IgnoreCollision(collision.collider, collider);
+    void Update(){
+        if(joint.connectedBody==null || joint.connectedBody.gameObject.tag=="SegmentDead"){
+            print("diesir");
+            gameObject.tag = "SegmentDead";
         }
     }
 }
