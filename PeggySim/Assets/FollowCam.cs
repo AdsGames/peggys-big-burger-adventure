@@ -13,10 +13,14 @@ public class FollowCam : MonoBehaviour
     private Camera cam;
 
     private GameObject cameraGhost;
+    private GameInfo info;
     private Vector3 velocity;
     private Vector3 rotationVelocity;
-    private float hyp;
-    private float theta;
+
+    public float initialOffset;
+    public float height;
+    public float scaleFactor;
+
 
 
     // Start is called before the first frame update
@@ -24,6 +28,7 @@ public class FollowCam : MonoBehaviour
     {
         cameraGhost = GameObject.FindGameObjectWithTag("CameraGhost");
         player = GameObject.FindGameObjectWithTag("Head");
+        info = GameObject.FindGameObjectWithTag("GameInfo").GetComponent<GameInfo>(); ;
         cam = GetComponent<Camera>();
 
     }
@@ -32,11 +37,13 @@ public class FollowCam : MonoBehaviour
     void FixedUpdate()
     {
         transform.position = Vector3.SmoothDamp(transform.position, 
-            new Vector3(cameraGhost.transform.position.x, cameraGhost.transform.position.y + target.transform.position.y, 
+            new Vector3(cameraGhost.transform.position.x, cameraGhost.transform.position.y, 
             cameraGhost.transform.position.z), 
             ref velocity, speed);
 
-        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, (player.GetComponent<Rigidbody>().velocity.magnitude * FOVFactor) + baseFov, 0.2f);
+        cam.fieldOfView = Mathf.Clamp(Mathf.Lerp(cam.fieldOfView, (player.GetComponent<Rigidbody>().velocity.magnitude * FOVFactor) + baseFov, 0.2f), 45, 85);
+
+        cameraGhost.transform.localPosition = new Vector3(0, height, initialOffset + ((info.getSegments() - 1) * scaleFactor));
 
 
         /*

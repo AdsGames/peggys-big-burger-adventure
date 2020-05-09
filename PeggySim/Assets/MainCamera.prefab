@@ -99,4 +99,7 @@ MonoBehaviour:
   target: {fileID: 0}
   speed: 0.01
   baseFov: 45
-  FOVFactor: 1.4
+  FOVFactor: 0.9
+  initialOffset: 3.5
+  height: 1.8
+  scaleFactor: 0.3
