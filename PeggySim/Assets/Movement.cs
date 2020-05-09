@@ -16,9 +16,6 @@ public class Movement : MonoBehaviour
 
     private GameObject head;
 
-    private float speed = 10;
-    private float rotation_speed = 2;
-
     public Rigidbody m_Rigidbody;
     Vector3 m_EulerAngleVelocity;
 

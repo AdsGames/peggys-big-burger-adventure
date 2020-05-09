@@ -252,6 +252,7 @@ GameObject:
   - component: {fileID: 7290895458191596420}
   - component: {fileID: 7290895458191596422}
   - component: {fileID: 7290895458191596419}
+  - component: {fileID: 4435409573249997459}
   - component: {fileID: 7290895458191596423}
   m_Layer: 0
   m_Name: Peggy
@@ -350,6 +351,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4a8665f4d3c6adaa85289b1776de653, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  turnSpeed: 10
+  moveSpeed: 30
+  movementReversed: 0
+  turningReversed: 0
+  drag: 0
+  angularDrag: 5
+  wheels: []
+  m_Rigidbody: {fileID: 7290895458191596422}
+--- !u!114 &4435409573249997459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7290895458191596425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a401abe1c6713794db2d128b3ccd2026, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   bodySegmentPrefab: {fileID: 6397360858029497203, guid: 858ca78b1216b9275a0bf868c71bdf97,
@@ -458,9 +479,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 858ca78b1216b9275a0bf868c71bdf97, type: 3}
---- !u!54 &88905341927380364 stripped
-Rigidbody:
-  m_CorrespondingSourceObject: {fileID: 6397360858029497202, guid: 858ca78b1216b9275a0bf868c71bdf97,
+--- !u!1 &88905341927380365 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6397360858029497203, guid: 858ca78b1216b9275a0bf868c71bdf97,
     type: 3}
   m_PrefabInstance: {fileID: 6484100589396512510}
   m_PrefabAsset: {fileID: 0}
@@ -470,9 +491,9 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 6484100589396512510}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &88905341927380365 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6397360858029497203, guid: 858ca78b1216b9275a0bf868c71bdf97,
+--- !u!54 &88905341927380364 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 6397360858029497202, guid: 858ca78b1216b9275a0bf868c71bdf97,
     type: 3}
   m_PrefabInstance: {fileID: 6484100589396512510}
   m_PrefabAsset: {fileID: 0}
