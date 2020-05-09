@@ -9,6 +9,7 @@ TagManager:
   - Leg
   - Segment
   - GameInfo
+
   layers:
   - Default
   - TransparentFX

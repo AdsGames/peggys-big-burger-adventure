@@ -13,12 +13,12 @@ public class Movement : MonoBehaviour
     public float angularDrag;
     public float segmentFactor;
 
+
     public List<GameObject> wheels;
 
     private GameObject head;
 
     private GameInfo info;
-
     public Rigidbody m_Rigidbody;
     Vector3 m_EulerAngleVelocity;
 
@@ -47,6 +47,7 @@ public class Movement : MonoBehaviour
         }
 
         info = GameObject.FindGameObjectWithTag("GameInfo").GetComponent<GameInfo>();
+
     }
 
     // Update is called once per frame
@@ -76,6 +77,7 @@ public class Movement : MonoBehaviour
         {
             m_Rigidbody.AddRelativeForce(new Vector3(0, 0, moveSpeed * (movementReversed ? 1 : -1) * ((info.getSegments()* segmentFactor)+ 1)), ForceMode.Acceleration);
 
+
             if (Input.GetAxis("Horizontal") < 0)
             {
                 m_Rigidbody.AddRelativeTorque(new Vector3(0, turnSpeed * (turningReversed ? 1 : -1), 0), ForceMode.Acceleration);
@@ -85,11 +87,12 @@ public class Movement : MonoBehaviour
                 m_Rigidbody.AddRelativeTorque(new Vector3(0, -turnSpeed * (turningReversed ? 1 : -1), 0), ForceMode.Acceleration);
             }
         }
-        Debug.Log(info.getSegments());
+
     }
     private void OnTriggerStay(Collider other)
     {
         if (other.tag == "Ground")
+
             onGround = true;
     }
     private void OnTriggerExit(Collider other)
