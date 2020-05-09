@@ -4,7 +4,7 @@ public class MusicController : MonoBehaviour
 {
   public AudioSource audioSource;
   public GameInfo gameInfo;
-  public float pitchMultiplier = 0.1f;
+  public float pitchMultiplier = 0.05f;
   public float maxPitch = 2.0f;
   public float basePitch = 0.5f;
 
