@@ -6,7 +6,6 @@ public class Wheel : MonoBehaviour
 {
 
     public WheelCollider collider;
-    public bool onGround;
 
     void Start()
     {
