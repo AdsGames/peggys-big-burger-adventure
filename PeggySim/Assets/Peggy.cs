@@ -39,9 +39,9 @@ public class Peggy : MonoBehaviour
             currentBodyStart.transform.position = pos;
             GameObject new_segment = Instantiate(bodySegmentPrefab, transform);
             new_segment.name = "FirstBody";
-            new_segment.GetComponent<CharacterJoint>().connectedBody = m_Rigidbody;
+            new_segment.GetComponent<HingeJoint>().connectedBody = m_Rigidbody;
 
-           currentBodyStart.GetComponent<CharacterJoint>().connectedBody = new_segment.GetComponent<Rigidbody>();
+           currentBodyStart.GetComponent<HingeJoint>().connectedBody = new_segment.GetComponent<Rigidbody>();
            
            currentBodyStart.transform.position = new Vector3(transform.position.x, 0, transform.position.z);
            currentBodyStart.name = "Body";

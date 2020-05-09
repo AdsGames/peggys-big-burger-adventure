@@ -11,7 +11,8 @@ public class HeadCollider : MonoBehaviour
         if(other.tag == "Segment" && other.name !="FirstBody"){
 
             dead=true;
-            other.GetComponent<CharacterJoint>().connectedBody = null;
+            Destroy(other.GetComponent<HingeJoint>().connectedBody.gameObject);
+            other.GetComponent<HingeJoint>().connectedBody = null;
         }
             
     }
