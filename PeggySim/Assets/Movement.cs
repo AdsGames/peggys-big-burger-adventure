@@ -85,7 +85,7 @@ public class Movement : MonoBehaviour
                 m_Rigidbody.AddRelativeTorque(new Vector3(0, -turnSpeed * (turningReversed ? 1 : -1), 0), ForceMode.Acceleration);
             }
         }
-        Debug.Log(info.getSegments());
+        //Debug.Log(info.getSegments());
     }
     private void OnTriggerStay(Collider other)
     {

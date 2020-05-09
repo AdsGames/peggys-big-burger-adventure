@@ -285,7 +285,7 @@ PrefabInstance:
     - target: {fileID: 7290895458191596419, guid: 88b3d7e63f7fdfaacbddd6169d61b195,
         type: 3}
       propertyPath: moveSpeed
-      value: 30
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7290895458191596419, guid: 88b3d7e63f7fdfaacbddd6169d61b195,
         type: 3}
@@ -301,6 +301,11 @@ PrefabInstance:
         type: 3}
       propertyPath: angularDrag
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7290895458191596419, guid: 88b3d7e63f7fdfaacbddd6169d61b195,
+        type: 3}
+      propertyPath: segmentFactor
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 7290895458191596425, guid: 88b3d7e63f7fdfaacbddd6169d61b195,
         type: 3}
