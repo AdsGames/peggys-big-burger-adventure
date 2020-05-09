@@ -39,7 +39,7 @@ public class Movement : MonoBehaviour
         wheels = new List<GameObject>();
         foreach(Transform child in transform)
         {
-            Debug.Log(child.tag);
+
             if (child.tag == "Leg")
             {
                 wheels.Add(child.gameObject);
@@ -69,14 +69,6 @@ public class Movement : MonoBehaviour
         m_Rigidbody.MoveRotation(m_Rigidbody.rotation * deltaRotation);
         }
         */
-        foreach(GameObject child in wheels)
-        {
-            if (child.GetComponent<Wheel>().onGround)
-            {
-                onGround = true;
-                break;
-            }
-        }
 
         if (onGround)
         {
@@ -91,5 +83,18 @@ public class Movement : MonoBehaviour
                 m_Rigidbody.AddRelativeTorque(new Vector3(0, -turnSpeed * (turningReversed ? 1 : -1), 0), ForceMode.Acceleration);
             }
         }
+    }
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.tag == "Ground")
+        {
+            onGround = true;
+            Debug.Log("boop");
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Ground")
+            onGround = false;
     }
 }
