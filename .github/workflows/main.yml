@@ -2,7 +2,7 @@ name: Build Unity Project
 
 on:
   push:
-    branches: test-build 
+    branches: master
 
 jobs:
   build:
@@ -33,11 +33,6 @@ jobs:
         targetPlatform: WebGL
         projectPath: PeggySim
         buildName: PeggySim
-
-    - uses: actions/upload-artifact@v1
-      with:
-        name: Build
-        path: build
         
     - name: Deploy to GitHub pages
       uses: JamesIves/github-pages-deploy-action@releases/v3
