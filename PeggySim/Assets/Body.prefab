@@ -137,7 +137,7 @@ HingeJoint:
   m_GameObject: {fileID: 6397360858029497203}
   m_ConnectedBody: {fileID: 0}
   m_Anchor: {x: 0, y: -1, z: 0}
-  m_Axis: {x: 1, y: -1.8, z: 0}
+  m_Axis: {x: 1, y: -2, z: 0}
   m_AutoConfigureConnectedAnchor: 1
   m_ConnectedAnchor: {x: 0.19095132, y: -0.20464665, z: 0.4891435}
   m_UseSpring: 0
