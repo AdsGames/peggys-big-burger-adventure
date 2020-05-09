@@ -9,7 +9,7 @@ TagManager:
   - Leg
   - Segment
   - GameInfo
-
+  - SegmentDead
   layers:
   - Default
   - TransparentFX

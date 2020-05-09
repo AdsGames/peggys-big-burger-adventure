@@ -13,7 +13,7 @@ public class Segment : MonoBehaviour
 
     void Update(){
         if(joint.connectedBody==null || joint.connectedBody.gameObject.tag=="SegmentDead"){
-            print("diesir");
+           
             gameObject.tag = "SegmentDead";
         }
     }
