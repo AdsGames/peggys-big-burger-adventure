@@ -8,13 +8,14 @@ public class HeadCollider : MonoBehaviour
     // Start is called bef
         private void OnTriggerEnter(Collider other)
     {
+        if(other!=null){
         if(other.tag == "Segment" && other.name !="FirstBody"){
 
             dead=true;
-            Destroy(other.GetComponent<HingeJoint>().connectedBody.gameObject);
+            //Destroy(other.GetComponent<HingeJoint>().connectedBody.gameObject);
             other.GetComponent<HingeJoint>().connectedBody = null;
         }
-            
+        }    
     }
     void Start()
     {

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 6397360858029497201}
   - component: {fileID: 1701678475798577220}
   - component: {fileID: 1342176095458285006}
+  - component: {fileID: 4489934352753740932}
   m_Layer: 0
   m_Name: Body
   m_TagString: Segment
@@ -136,7 +137,7 @@ HingeJoint:
   m_GameObject: {fileID: 6397360858029497203}
   m_ConnectedBody: {fileID: 0}
   m_Anchor: {x: 0, y: -1, z: 0}
-  m_Axis: {x: 1, y: -2, z: 0}
+  m_Axis: {x: 1, y: -1.8, z: 0}
   m_AutoConfigureConnectedAnchor: 1
   m_ConnectedAnchor: {x: 0.19095132, y: -0.20464665, z: 0.4891435}
   m_UseSpring: 0
@@ -162,3 +163,16 @@ HingeJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &4489934352753740932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6397360858029497203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00e39427489e3da4482c53487c0483f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  joint: {fileID: 0}

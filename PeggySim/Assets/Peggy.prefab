@@ -506,7 +506,7 @@ MonoBehaviour:
   turningReversed: 0
   drag: 1
   angularDrag: 5
-  segmentFactor: 0
+  segmentFactor: 0.1
   wheels: []
   m_Rigidbody: {fileID: 7290895458191596422}
 --- !u!114 &4435409573249997459

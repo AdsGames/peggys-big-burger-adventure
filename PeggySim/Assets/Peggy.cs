@@ -30,7 +30,7 @@ public class Peggy : MonoBehaviour
     void Update()
     {
         if(transform.GetChild(0).GetComponent<HeadCollider>().dead){
-            print("you died sir");
+           // print("you died sir");
         };
 
         if (Input.GetKeyDown(KeyCode.F)){

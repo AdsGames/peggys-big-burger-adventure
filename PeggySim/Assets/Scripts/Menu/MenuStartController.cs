@@ -15,6 +15,6 @@ public class MenuStartController : MonoBehaviour
 
   private void HandleStart()
   {
-    SceneManager.LoadScene(sceneName: "SampleScene");
+    SceneManager.LoadScene(sceneName: "Level1");
   }
 }
