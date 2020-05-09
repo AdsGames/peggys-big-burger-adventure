@@ -74,6 +74,9 @@ public class Movement : MonoBehaviour
 
         if (onGround)
         {
+            m_Rigidbody.drag = drag;
+            m_Rigidbody.angularDrag = angularDrag;
+
             m_Rigidbody.AddRelativeForce(new Vector3(0, 0, moveSpeed * (movementReversed ? 1 : -1) * ((info.getSegments()* segmentFactor)+ 1)), ForceMode.Acceleration);
 
             if (Input.GetAxis("Horizontal") < 0)
@@ -89,6 +92,11 @@ public class Movement : MonoBehaviour
             {
                 m_Rigidbody.AddRelativeForce(new Vector3(0, 50, 0), ForceMode.Impulse);
             }
+        }
+        else
+        {
+            m_Rigidbody.drag = 0;
+            m_Rigidbody.angularDrag = 0;
         }
         Debug.Log(info.getSegments());
     }
