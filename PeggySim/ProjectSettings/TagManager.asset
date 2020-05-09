@@ -10,6 +10,9 @@ TagManager:
   - Segment
   - GameInfo
   - SegmentDead
+  - LenghtUI
+  - Pickable
+  - Food
   layers:
   - Default
   - TransparentFX

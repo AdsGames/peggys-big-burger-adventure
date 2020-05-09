@@ -24,17 +24,13 @@ public class Peggy : MonoBehaviour
 
 
     }
- 
-
-    // Update is called once per frame
-    void Update()
-    {
-        if(transform.GetChild(0).GetComponent<HeadCollider>().dead){
-           // print("you died sir");
-        };
-
-        if (Input.GetKeyDown(KeyCode.F)){
-           
+    public void handleCollision(GameObject other){
+        if(other.tag == "Food"){
+            addSegment();
+            Destroy(other);
+        }
+    }
+    void addSegment(){
             Vector3 pos = currentBodyStart.transform.position +  transform.forward * 1.0f;
             currentBodyStart.transform.position = pos;
             GameObject new_segment = Instantiate(bodySegmentPrefab, transform);
@@ -46,6 +42,20 @@ public class Peggy : MonoBehaviour
            currentBodyStart.transform.position = new Vector3(transform.position.x, 0, transform.position.z);
            currentBodyStart.name = "Body";
            currentBodyStart = new_segment;
+
+    }
+ 
+
+    // Update is called once per frame
+    void Update()
+    {
+        if(transform.GetChild(0).GetComponent<HeadCollider>().dead){
+           // print("you died sir");
+        };
+
+        if (Input.GetKeyDown(KeyCode.F)){
+           
+            addSegment();
         }
 
     }
