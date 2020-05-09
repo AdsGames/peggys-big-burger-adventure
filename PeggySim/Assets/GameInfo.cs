@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameInfo : MonoBehaviour
 {
+    public int goal;
+
     void Start()
     {
         
@@ -17,5 +19,10 @@ public class GameInfo : MonoBehaviour
     public int getSegments()
     {
         return GameObject.FindGameObjectsWithTag("Segment").Length;
+    }
+
+    public int getGoal()
+    {
+        return goal;
     }
 }
