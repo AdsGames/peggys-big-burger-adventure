@@ -13,6 +13,7 @@ TagManager:
   - LenghtUI
   - Pickable
   - Food
+  - CameraGhost
   layers:
   - Default
   - TransparentFX
