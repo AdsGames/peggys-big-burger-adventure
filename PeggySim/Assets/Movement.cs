@@ -84,6 +84,11 @@ public class Movement : MonoBehaviour
             {
                 m_Rigidbody.AddRelativeTorque(new Vector3(0, -turnSpeed * (turningReversed ? 1 : -1), 0), ForceMode.Acceleration);
             }
+
+            if(Input.GetButton("Jump"))
+            {
+                m_Rigidbody.AddRelativeForce(new Vector3(0, 50, 0), ForceMode.Impulse);
+            }
         }
         Debug.Log(info.getSegments());
     }
