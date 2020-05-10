@@ -45,7 +45,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 0.32003593, g: 0, b: 1, a: 1}
   m_Intensity: 100
-  m_Range: 13.000002
+  m_Range: 22.000002
   m_SpotAngle: 21.1
   m_InnerSpotAngle: 1
   m_CookieSize: 10
@@ -151,7 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fdad4e8e0de5505da6b24c9786ba002, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  respawnTime: 10
+  respawnTime: 30
   spawnHeight: 1
   item: {fileID: 1892928331037838605, guid: 763cf4f9b42c81397a585ea4a795d32d, type: 3}
 --- !u!65 &8211913771604407551
