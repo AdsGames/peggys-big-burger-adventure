@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4565760959436725590}
   - component: {fileID: 3437156954265760221}
+  - component: {fileID: 1323157406747193818}
   m_Layer: 0
   m_Name: Spot Light
   m_TagString: Untagged
@@ -43,10 +44,10 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 0.32003593, g: 0, b: 1, a: 1}
-  m_Intensity: 10
+  m_Intensity: 100
   m_Range: 13.000002
-  m_SpotAngle: 30
-  m_InnerSpotAngle: 21.80208
+  m_SpotAngle: 21.1
+  m_InnerSpotAngle: 1
   m_CookieSize: 10
   m_Shadows:
     m_Type: 0
@@ -92,6 +93,18 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!122 &1323157406747193818
+Halo:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5733817950017247843}
+  m_Enabled: 1
+  m_Color:
+    serializedVersion: 2
+    rgba: 4294901842
+  m_Size: 3
 --- !u!1 &7128132574512631941
 GameObject:
   m_ObjectHideFlags: 0
@@ -119,7 +132,7 @@ Transform:
   m_GameObject: {fileID: 7128132574512631941}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6393649112869042569}
   - {fileID: 4565760959436725590}
@@ -152,8 +165,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 2, z: 2}
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Size: {x: 4, y: 8, z: 4}
+  m_Center: {x: 0, y: 4, z: 0}
 --- !u!1001 &2143846672891204243
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -219,17 +232,17 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: dc07a8dbc95e3a24fb822c82175b36b2,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 20
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: dc07a8dbc95e3a24fb822c82175b36b2,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 20
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: dc07a8dbc95e3a24fb822c82175b36b2,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 20
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: -1504981713932161579, guid: dc07a8dbc95e3a24fb822c82175b36b2,
         type: 3}
