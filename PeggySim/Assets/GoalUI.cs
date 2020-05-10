@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class GoalUI : MonoBehaviour
 {
     private Text GoalText;
-
+    private int highscore=1;
     void Start()
     {
         GoalText = GetComponent<Text>();
@@ -16,6 +16,9 @@ public class GoalUI : MonoBehaviour
     
     void Update()
     {
-        GoalText.text = GameObject.FindGameObjectWithTag("GameInfo").GetComponent<GameInfo>().getGoal().ToString();
+        int new_highscore  = GameObject.FindGameObjectWithTag("GameInfo").GetComponent<GameInfo>().getSegments();
+        if(new_highscore>highscore)
+            highscore=new_highscore;
+        GoalText.text =highscore.ToString();
     }
 }

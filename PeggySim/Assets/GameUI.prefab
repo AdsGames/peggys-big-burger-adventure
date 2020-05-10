@@ -601,7 +601,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 28, y: 17}
+  m_AnchoredPosition: {x: 20.8, y: 17}
   m_SizeDelta: {x: 200, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2983513746327026135
@@ -644,7 +644,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Goal: '
+  m_Text: 'highscore:'
 --- !u!1 &2620231820148256902
 GameObject:
   m_ObjectHideFlags: 0
@@ -912,7 +912,7 @@ GameObject:
   - component: {fileID: 985213847310653224}
   - component: {fileID: 1707666209094224397}
   m_Layer: 5
-  m_Name: Goal
+  m_Name: Highscore
   m_TagString: LenghtUI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -934,7 +934,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 97.80003, y: 0}
+  m_AnchoredPosition: {x: 135.8, y: 0.7}
   m_SizeDelta: {x: 200, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &741842994274090236
@@ -1105,7 +1105,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -310, y: -148.1}
-  m_SizeDelta: {x: 170, y: 75}
+  m_SizeDelta: {x: 170, y: 85}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3888885998796687459
 CanvasRenderer:
