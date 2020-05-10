@@ -1,37 +1,41 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class HeadCollider : MonoBehaviour
 {
-    public bool dead=false;
-    private Peggy parent;
+  private Peggy parent;
+  public GameObject explodeParticle;
+  public GameObject itemParticle;
+  public SoundEffectManager soundManager;
 
-    // Start is called before ur butt
-        private void OnTriggerEnter(Collider other)
-    {
-        parent.handleCollision(other.gameObject);
-        //if(other!=null){
-        if(other.tag == "Segment" && other.name !="FirstBody"){
+  private void Start()
+  {
+    parent = transform.parent.GetComponent<Peggy>();
+  }
 
-            GameObject new_particle = Instantiate(parent.explodeParticle);
-            new_particle.transform.position = other.transform.position;
-
-            dead=true;
-            //Destroy(other.GetComponent<HingeJoint>().connectedBody.gameObject);
-            other.GetComponent<HingeJoint>().connectedBody = null;
-            
-        }
-        //}    
-    }
-    void Start()
-    {
-        parent = this.transform.parent.GetComponent<Peggy>();
+  private void OnTriggerEnter(Collider other)
+  {
+    if (!other || !parent) {
+      Debug.Log("Other or parent is null!");
+      return;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    if (other.tag == "Segment" && other.name != "FirstBody") {
+      GameObject new_particle = Instantiate(explodeParticle);
+      new_particle.transform.position = other.transform.position;
+      other.GetComponent<HingeJoint>().connectedBody = null;
     }
+
+    if (other.tag == "Food") {
+      GameObject new_particle = Instantiate(itemParticle);
+      new_particle.transform.position = other.transform.position;
+      parent.AddSegment();
+      Destroy(other.gameObject);
+
+      if (soundManager) {
+        soundManager.playEat();
+      } else {
+        Debug.Log("No sound manager");
+      }
+    }
+  }
 }

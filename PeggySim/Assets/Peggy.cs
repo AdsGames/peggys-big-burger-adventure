@@ -1,76 +1,33 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Peggy : MonoBehaviour
 {
+  public GameObject bodySegmentPrefab = null;
+  public GameObject currentBodyStart = null;
+  private Rigidbody rigidBody = null;
 
-    public GameObject bodySegmentPrefab;
-    public GameObject currentBodyStart;
-    public GameObject explodeParticle;
-    public GameObject itemParticle;
+  private void Start()
+  {
+    rigidBody = GetComponent<Rigidbody>();
+  }
 
+  public void AddSegment()
+  {
+    GameObject newSegment = Instantiate(bodySegmentPrefab, transform);
+    newSegment.name = "FirstBody";
+    newSegment.GetComponent<HingeJoint>().connectedBody = rigidBody;
 
-    private float speed = 10;
-    private float rotation_speed = 2;
+    currentBodyStart.transform.position = currentBodyStart.transform.position + transform.forward * 1.0f;
+    currentBodyStart.GetComponent<HingeJoint>().connectedBody = newSegment.GetComponent<Rigidbody>();
+    currentBodyStart.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+    currentBodyStart.name = "Body";
+    currentBodyStart = newSegment;
+  }
 
-    private Random rnd;
-
-    
-    public Rigidbody m_Rigidbody;
-    public GameObject Food;
-    Vector3 m_EulerAngleVelocity;
-    // Start is called before the first frame update
-    void Start()
-    {
-
-        //Fetch the Rigidbody from the GameObject with this script attached
-        m_Rigidbody = GetComponent<Rigidbody>();
-
-        rnd = new Random();
-
-
-
+  private void Update()
+  {
+    if (Input.GetKeyDown(KeyCode.F)) {
+      AddSegment();
     }
-    public void handleCollision(GameObject other){
-        if(other.tag == "Food"){
-            addSegment();
-            Destroy(other);
- 
-            GameObject new_particle = Instantiate(itemParticle);
-            new_particle.transform.position = other.transform.position;
-
-
-      
-        }
-    }
-    void addSegment(){
-            Vector3 pos = currentBodyStart.transform.position +  transform.forward * 1.0f;
-            currentBodyStart.transform.position = pos;
-            GameObject new_segment = Instantiate(bodySegmentPrefab, transform);
-            new_segment.name = "FirstBody";
-            new_segment.GetComponent<HingeJoint>().connectedBody = m_Rigidbody;
-
-           currentBodyStart.GetComponent<HingeJoint>().connectedBody = new_segment.GetComponent<Rigidbody>();
-           
-           currentBodyStart.transform.position = new Vector3(transform.position.x, 0, transform.position.z);
-           currentBodyStart.name = "Body";
-           currentBodyStart = new_segment;
-
-    }
- 
-
-    // Update is called once per frame
-    void Update()
-    {
-        if(transform.GetChild(0).GetComponent<HeadCollider>().dead){
-           // print("you died sir");
-        };
-
-        if (Input.GetKeyDown(KeyCode.F)){
-           
-            addSegment();
-        }
-
-    }
+  }
 }
