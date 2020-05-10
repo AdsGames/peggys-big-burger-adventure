@@ -57,7 +57,7 @@ public class Movement : MonoBehaviour
 
   private void FixedUpdate()
   {
- 
+    print(isBoosting);
     if (onGround) {
       rigidBody.drag = drag;
       rigidBody.angularDrag = angularDrag;
@@ -97,6 +97,8 @@ public class Movement : MonoBehaviour
                   currentBoostMeter -= 0.8f;
                   soundManager.playBoost();
               }else{
+                isBoosting = false;
+                effectiveMoveSpeed = moveSpeed;
                 Destroy(currentBoostParticle);
               }
             }
