@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 6065676945822069542}
   - component: {fileID: 6065676945822069540}
   - component: {fileID: 6065676945822069541}
-  - component: {fileID: 6065676945822069547}
+  - component: {fileID: 730423643271667420}
   m_Layer: 5
-  m_Name: RawImage
+  m_Name: SplashImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -72,19 +72,16 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
---- !u!111 &6065676945822069547
-Animation:
+--- !u!114 &730423643271667420
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6065676945822069543}
   m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: dc2fd06f965846f408914046b8f54cf8, type: 2}
-  m_Animations:
-  - {fileID: 7400000, guid: dc2fd06f965846f408914046b8f54cf8, type: 2}
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_CullingType: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d23d4ad4806538e46b0b6d1822a722a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  splashTime: 3

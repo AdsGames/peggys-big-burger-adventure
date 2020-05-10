@@ -1,30 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class AnimationEvents : MonoBehaviour
 {
-    public bool Complete = false;
+  public bool complete = false;
 
-    // Start is called before the first frame update
-    void Start()
-    {
+  public void AnimationFinished()
+  {
+    complete = true;
+  }
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    public void AnimationFinished()
-    {
-        Complete = true;
-    }
-
-    public void StartAnimation()
-    {
-        Complete = false;
-    }
+  public void StartAnimation()
+  {
+    complete = false;
+  }
 }
