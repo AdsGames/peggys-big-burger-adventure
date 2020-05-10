@@ -70,11 +70,15 @@ public class Movement : MonoBehaviour
       }
 
             //Allan is a big dummy with stupid formatting
-            if (Input.GetButton("Fire1") && currentHandBrakeMeter > 0)
+            if (Input.GetButton("Fire1") && GameObject.FindGameObjectWithTag("Butt").GetComponent<ButtScript>().connected)
             {
+              if(currentHandBrakeMeter > 0 ){
                 effectiveTurnSpeed = handBrakeSpeed;
                 currentHandBrakeMeter -= 1;
                 soundManager.playHandbrake();
+              }else{
+                effectiveTurnSpeed = turnSpeed;
+              }
             }
             else
             {
@@ -83,7 +87,7 @@ public class Movement : MonoBehaviour
                     currentHandBrakeMeter += 0.1f;
             }
 
-            if(Input.GetButton("Fire2"))
+            if(Input.GetButton("Fire2") && GameObject.FindGameObjectWithTag("Butt").GetComponent<ButtScript>().connected)
             {
               if(currentBoostMeter>0){
                 if(!isBoosting)
