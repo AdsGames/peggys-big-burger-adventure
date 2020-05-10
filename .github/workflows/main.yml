@@ -9,34 +9,38 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v2
-      with:
-        lfs: true
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          lfs: true
 
-    - uses: actions/cache@v1.1.0
-      with:
-        path: PeggySim/Library
-        key: Library-PeggySim-WebGL
-        restore-keys: |
-          Library-PeggySim-
-          Library-
+      - uses: actions/cache@v1.1.0
+        with:
+          path: PeggySim/Library
+          key: Library-PeggySim-WebGL
+          restore-keys: |
+            Library-PeggySim-
+            Library-
 
-    - name: Build Unity Project
-      uses: webbertakken/unity-builder@v0.15
-      env:
-        UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-        UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
-      with:
-        unityVersion: 2019.3.12f1
-        targetPlatform: WebGL
-        projectPath: PeggySim
-        buildName: PeggySim
-        
-    - name: Deploy to GitHub pages
-      uses: JamesIves/github-pages-deploy-action@releases/v3
-      with:
-        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-        BRANCH: gh-pages
-        FOLDER: build 
+      - name: Build Unity Project
+        uses: webbertakken/unity-builder@v0.15
+        env:
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+        with:
+          unityVersion: 2019.3.12f1
+          targetPlatform: WebGL
+          projectPath: PeggySim
+          buildName: PeggySim
+
+      - name: Copy in extra pages assets
+        run: cp -r ./pages/* ./build
+
+      - name: Deploy to GitHub pages
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: build
+          SINGLE_COMMIT: true
