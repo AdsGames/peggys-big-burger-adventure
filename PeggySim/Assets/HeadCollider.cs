@@ -20,6 +20,7 @@ public class HeadCollider : MonoBehaviour
     }
 
     if (other.tag == "Segment" && other.name != "FirstBody") {
+        parent.breakTimer=0;
       GameObject new_particle = Instantiate(explodeParticle);
       new_particle.transform.position = other.transform.position;
       other.GetComponent<HingeJoint>().connectedBody = null;
@@ -36,6 +37,12 @@ public class HeadCollider : MonoBehaviour
       } else {
         Debug.Log("No sound manager");
       }
+    }
+     if(other.tag=="Butt"){
+     
+        print("got ur butt");
+        parent.handleButtCollision(other);
+        
     }
   }
 }

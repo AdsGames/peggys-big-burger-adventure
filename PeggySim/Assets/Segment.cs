@@ -1,23 +1,28 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class Segment : MonoBehaviour
 {
-  private HingeJoint joint;
-
-  private void Start()
-  {
-    joint = GetComponent<HingeJoint>();
-  }
-
-  private void Update()
-  {
-    if (joint == null) {
-      return;
+    public HingeJoint joint;
+    float age;
+    void Start()
+    {
+       joint = GetComponent<HingeJoint>();
+       age = Time.time;
+       
+    }
+    public float getAge(){
+        return age;
     }
 
-    if (joint.connectedBody == null || joint.connectedBody.gameObject.tag == "SegmentDead") {
-      gameObject.tag = "SegmentDead";
-      Destroy(joint);
+    void Update(){
+        if(joint!=null){
+            if(joint.connectedBody==null || joint.connectedBody.gameObject.tag=="SegmentDead"){
+           
+                gameObject.tag = "SegmentDead";
+                Destroy(joint);
+            }
+        }
     }
-  }
 }

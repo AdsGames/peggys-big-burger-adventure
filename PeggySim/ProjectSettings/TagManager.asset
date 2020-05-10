@@ -15,6 +15,7 @@ TagManager:
   - Food
   - CameraGhost
   - SoundEffectManager
+  - Butt
   layers:
   - Default
   - TransparentFX
