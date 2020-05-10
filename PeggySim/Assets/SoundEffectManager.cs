@@ -6,6 +6,8 @@ public class SoundEffectManager : MonoBehaviour
   public AudioClip bork;
   public AudioClip step;
   public AudioClip eat;
+    public AudioClip handBrake;
+    public AudioClip boost;
 
   private List<AudioSource> audioSources;
 
@@ -28,6 +30,15 @@ public class SoundEffectManager : MonoBehaviour
   {
     playAudio(eat, 1, 1);
   }
+
+    public void playHandbrake()
+    {
+        playAudio(handBrake, 1, 1);
+    }
+    public void playBoost()
+    {
+        playAudio(boost, 1, 1);
+    }
 
   private void playAudio(AudioClip clip, float pitch, float volume)
   {

@@ -50,6 +50,8 @@ MonoBehaviour:
   bork: {fileID: 8300000, guid: f069eef7e3bb7624aa7a5916e5467d7e, type: 3}
   step: {fileID: 8300000, guid: ac807f7d09a569b40b72e3c4ccb7505b, type: 3}
   eat: {fileID: 8300000, guid: e87aa392b1a98954c87bf40c24edffd4, type: 3}
+  handBrake: {fileID: 8300000, guid: 9c9e0e8d5f630e84cab7287fc8ea57a2, type: 3}
+  boost: {fileID: 8300000, guid: 69057daf3d08d3d4db7f0cf2d8b64798, type: 3}
 --- !u!82 &2280044955092130891
 AudioSource:
   m_ObjectHideFlags: 0

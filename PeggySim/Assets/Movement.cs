@@ -27,7 +27,7 @@ public class Movement : MonoBehaviour
   private Vector3 m_EulerAngleVelocity;
   private bool onGround = true;
     private float effectiveTurnSpeed;
-    private float currentHandBrakeMeter;
+    public float currentHandBrakeMeter;
 
     private float effectiveMoveSpeed;
     public float currentBoostMeter;
@@ -68,6 +68,7 @@ public class Movement : MonoBehaviour
             {
                 effectiveTurnSpeed = handBrakeSpeed;
                 currentHandBrakeMeter -= 1;
+                soundManager.playHandbrake();
             }
             else
             {
@@ -80,7 +81,8 @@ public class Movement : MonoBehaviour
             {
                 isBoosting = true;
                 effectiveMoveSpeed = boostSpeed;
-                currentBoostMeter -= 0.3f;
+                currentBoostMeter -= 0.8f;
+                soundManager.playBoost();
             }
             else
             {
