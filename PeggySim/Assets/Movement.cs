@@ -28,6 +28,9 @@ public class Movement : MonoBehaviour
   private bool onGround = true;
     private float effectiveTurnSpeed;
     public float currentHandBrakeMeter;
+    private GameObject currentBoostParticle;
+    public GameObject boostParticle;
+
 
     private float effectiveMoveSpeed;
     public float currentBoostMeter;
@@ -52,6 +55,7 @@ public class Movement : MonoBehaviour
 
   private void FixedUpdate()
   {
+ 
     if (onGround) {
       rigidBody.drag = drag;
       rigidBody.angularDrag = angularDrag;
@@ -77,15 +81,27 @@ public class Movement : MonoBehaviour
                     currentHandBrakeMeter += 0.1f;
             }
 
-            if(Input.GetButton("Fire2") && currentBoostMeter > 0)
+            if(Input.GetButton("Fire2"))
             {
-                isBoosting = true;
-                effectiveMoveSpeed = boostSpeed;
-                currentBoostMeter -= 0.8f;
-                soundManager.playBoost();
+              if(currentBoostMeter>0){
+                if(!isBoosting)
+                    currentBoostParticle = Instantiate(boostParticle);
+                currentBoostParticle.transform.position = transform.position;
+                
+                
+
+                  isBoosting = true;
+                  effectiveMoveSpeed = boostSpeed;
+                  currentBoostMeter -= 0.8f;
+                  soundManager.playBoost();
+              }else{
+                Destroy(currentBoostParticle);
+              }
             }
             else
             {
+              
+               Destroy(currentBoostParticle);
                 isBoosting = false;
                 effectiveMoveSpeed = moveSpeed;
                 if (currentBoostMeter < maxBoostMeter)
