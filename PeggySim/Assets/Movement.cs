@@ -113,7 +113,7 @@ public class Movement : MonoBehaviour
                 isBoosting = false;
                 effectiveMoveSpeed = moveSpeed;
                 if (currentBoostMeter < maxBoostMeter)
-                    currentBoostMeter += 1;
+                    currentBoostMeter += 0.1f;
             }
 
       if (Input.GetButton("Jump")) {
