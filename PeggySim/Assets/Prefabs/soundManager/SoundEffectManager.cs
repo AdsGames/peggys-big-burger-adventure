@@ -18,27 +18,27 @@ public class SoundEffectManager : MonoBehaviour
 
   public void playBork()
   {
-    playAudio(0, 0.8f);
+    playAudio(0, 0.6f);
   }
 
   public void playEat()
   {
-    playAudio(1, 0.6f);
+    playAudio(1, 0.3f);
   }
 
   public void playHandbrake()
   {
-    playAudio(2, 0.8f);
+    playAudio(2, 0.5f);
   }
 
   public void playStep(float pitch)
   {
-    playAudio(3, 0.4f, pitch);
+    playAudio(3, 0.3f, pitch);
   }
 
   public void playBoost()
   {
-    playAudio(4, 0.6f);
+    playAudio(4, 0.5f);
   }
 
   public void playLegsRetreived()
