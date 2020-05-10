@@ -1726,7 +1726,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -176, y: -78}
+  m_AnchoredPosition: {x: -176, y: -69}
   m_SizeDelta: {x: 500, y: 500.34875}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &969700742
@@ -2039,7 +2039,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -207, y: -314}
+  m_AnchoredPosition: {x: -207, y: -277}
   m_SizeDelta: {x: 450, y: 500.34875}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1565289452
@@ -2082,9 +2082,11 @@ MonoBehaviour:
     keys
     ''a'' and ''d'' move left and right
 
+    key ''space to jump
 
-    ''control'' is handbrake for sharp
-    turns
+
+    ''control''
+    is handbrake for sharp turns
 
     ''alt'' is boost to move peggy faster'
 --- !u!222 &1565289453
@@ -2113,7 +2115,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1638254103
 RectTransform:
   m_ObjectHideFlags: 0
