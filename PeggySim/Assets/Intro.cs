@@ -15,11 +15,15 @@ public class Intro : MonoBehaviour
 
     public List<AudioClip> audio;
 
+    private SoundEffectManager SoundMan;
+
     void Start()
     {
 
         introText = GetComponent<Text>();
         StartCoroutine(playIntro());
+
+        SoundMan = GameObject.FindGameObjectWithTag("SoundEffectManager").GetComponent<SoundEffectManager>();
     }
 
     // Update is called once per frame
@@ -72,7 +76,8 @@ public class Intro : MonoBehaviour
         GameObject.FindGameObjectWithTag("Head").GetComponent<Movement>().enabled = true;
         yield return new WaitForSeconds(0.7f);
         GameObject.Find("MainMusic").GetComponent<AudioSource>().enabled = true;
+        SoundMan.playBork();
         go.transform.GetChild(0).GetComponent<Text>().enabled = false;
-        Debug.Log("Ding!");
+
     }
 }

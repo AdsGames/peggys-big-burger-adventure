@@ -1,115 +1,79 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    //publics to be provided in editor
-    public float turnSpeed;
-    public float moveSpeed;
-    public bool movementReversed;
-    public bool turningReversed;
-    public float drag;
-    public float angularDrag;
-    public float segmentFactor;
+  //publics to be provided in editor
+  public float turnSpeed;
+  public float moveSpeed;
+  public bool movementReversed;
+  public bool turningReversed;
+  public float drag;
+  public float angularDrag;
+  public float segmentFactor;
 
-    public List<GameObject> wheels;
+  public SoundEffectManager soundManager;
+  public GameInfo info;
 
-    private GameObject head;
+  private List<GameObject> wheels;
+  private Rigidbody m_Rigidbody;
+  private Vector3 m_EulerAngleVelocity;
+  private bool onGround = true;
 
-    private GameInfo info;
+  private void Start()
+  {
+    //Set the axis the Rigidbody rotates in (100 in the y axis)
+    m_EulerAngleVelocity = new Vector3(0, 100, 0);
 
-    public Rigidbody m_Rigidbody;
-    Vector3 m_EulerAngleVelocity;
+    //Fetch the Rigidbody from the GameObject with this script attached
+    m_Rigidbody = GetComponent<Rigidbody>();
+    m_Rigidbody.drag = drag;
+    m_Rigidbody.angularDrag = angularDrag;
 
-    private bool onGround = false;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-   //Set the axis the Rigidbody rotates in (100 in the y axis)
-        m_EulerAngleVelocity = new Vector3(0, 100, 0);
-
-        //Fetch the Rigidbody from the GameObject with this script attached
-        m_Rigidbody = GetComponent<Rigidbody>();
-
-        m_Rigidbody.drag = drag;
-        m_Rigidbody.angularDrag = angularDrag;
-
-        wheels = new List<GameObject>();
-        foreach(Transform child in transform)
-        {
-
-            if (child.tag == "Leg")
-            {
-                wheels.Add(child.gameObject);
-            }
-        }
-
-        info = GameObject.FindGameObjectWithTag("GameInfo").GetComponent<GameInfo>();
+    wheels = new List<GameObject>();
+    foreach (Transform child in transform) {
+      if (child.tag == "Leg") {
+        wheels.Add(child.gameObject);
+      }
     }
+  }
 
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        /* The Danno original
-        if (!Input.GetKey(KeyCode.W))
-            m_Rigidbody.MovePosition(m_Rigidbody.position + transform.forward * -speed * Time.fixedDeltaTime);
+  private void FixedUpdate()
+  {
+    if (onGround) {
+      m_Rigidbody.drag = drag;
+      m_Rigidbody.angularDrag = angularDrag;
+      m_Rigidbody.AddRelativeForce(new Vector3(0, 0, moveSpeed * (movementReversed ? 1 : -1) * ((info.getSegments() * segmentFactor) + 1)), ForceMode.Acceleration);
 
+      if (Input.GetAxis("Horizontal") < 0) {
+        m_Rigidbody.AddRelativeTorque(new Vector3(0, turnSpeed * (turningReversed ? 1 : -1), 0), ForceMode.Acceleration);
+      } else if (Input.GetAxis("Horizontal") > 0) {
+        m_Rigidbody.AddRelativeTorque(new Vector3(0, -turnSpeed * (turningReversed ? 1 : -1), 0), ForceMode.Acceleration);
+      }
 
-        if (Input.GetKey(KeyCode.A)){
-                    Quaternion deltaRotation = Quaternion.Euler(m_EulerAngleVelocity * -Time.deltaTime);
-                     m_Rigidbody.MoveRotation(m_Rigidbody.rotation * deltaRotation);
-        }
-        if (Input.GetKey(KeyCode.Space)){
-           m_Rigidbody.AddRelativeForce(new Vector3(0,100,0));
-        }
-      
-        if (Input.GetKey(KeyCode.D)){
-            
-        Quaternion deltaRotation = Quaternion.Euler(m_EulerAngleVelocity * Time.deltaTime);
-        m_Rigidbody.MoveRotation(m_Rigidbody.rotation * deltaRotation);
-        }
-        */
-
-        if (onGround)
-        {
-            m_Rigidbody.drag = drag;
-            m_Rigidbody.angularDrag = angularDrag;
+      if (Input.GetButton("Jump")) {
+        m_Rigidbody.AddRelativeForce(new Vector3(0, 50, 0), ForceMode.Impulse);
+      }
 
 
-            m_Rigidbody.AddRelativeForce(new Vector3(0, 0, moveSpeed * (movementReversed ? 1 : -1) * ((info.getSegments()* segmentFactor)+ 1)), ForceMode.Acceleration);
-
-            if (Input.GetAxis("Horizontal") < 0)
-            {
-                m_Rigidbody.AddRelativeTorque(new Vector3(0, turnSpeed * (turningReversed ? 1 : -1), 0), ForceMode.Acceleration);
-            }
-            else if (Input.GetAxis("Horizontal") > 0)
-            {
-                m_Rigidbody.AddRelativeTorque(new Vector3(0, -turnSpeed * (turningReversed ? 1 : -1), 0), ForceMode.Acceleration);
-            }
-
-            if(Input.GetButton("Jump"))
-            {
-                m_Rigidbody.AddRelativeForce(new Vector3(0, 50, 0), ForceMode.Impulse);
-            }
-        }
-        else
-        {
-            m_Rigidbody.drag = 0;
-            m_Rigidbody.angularDrag = 0;
-
-        }
-        Debug.Log(info.getSegments());
+      if (soundManager) {
+        soundManager.playStep(m_Rigidbody.velocity.magnitude / 50f);
+      } else {
+        Debug.Log("No sound manager");
+      }
+    } else {
+      m_Rigidbody.drag = 0;
+      m_Rigidbody.angularDrag = 0;
     }
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.tag == "Ground")
-            onGround = true;
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.tag == "Ground")
-            onGround = false;
-    }
+  }
+  private void OnTriggerStay(Collider other)
+  {
+    if (other.tag == "Ground")
+      onGround = true;
+  }
+  private void OnTriggerExit(Collider other)
+  {
+    if (other.tag == "Ground")
+      onGround = false;
+  }
 }

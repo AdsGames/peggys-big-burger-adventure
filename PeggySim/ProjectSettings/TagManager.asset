@@ -14,6 +14,7 @@ TagManager:
   - Pickable
   - Food
   - CameraGhost
+  - SoundEffectManager
   layers:
   - Default
   - TransparentFX
