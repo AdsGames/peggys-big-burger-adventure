@@ -44,7 +44,7 @@ public class FollowCam : MonoBehaviour
       speed
     );
 
-    cam.fieldOfView = Mathf.Clamp(Mathf.Lerp(cam.fieldOfView, (player.GetComponent<Rigidbody>().velocity.magnitude * FOVFactor) + baseFov, 0.2f), 45, 85);
+    cam.fieldOfView = Mathf.Clamp(Mathf.Lerp(cam.fieldOfView, (player.GetComponent<Rigidbody>().velocity.magnitude * FOVFactor) + baseFov + (player.GetComponent<Movement>().isBoosting ? 10:0), 0.2f), 45, 85);
     cameraGhost.transform.localPosition = new Vector3(0, height, initialOffset + ((info.getSegments() - 1) * scaleFactor));
     transform.eulerAngles = new Vector3(cameraGhost.transform.eulerAngles.x, cameraGhost.transform.eulerAngles.y, cameraGhost.transform.eulerAngles.z);
   }
