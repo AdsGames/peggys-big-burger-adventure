@@ -3,62 +3,51 @@ using UnityEngine;
 
 public class SoundEffectManager : MonoBehaviour
 {
-  public AudioClip bork;
-  public AudioClip step;
-  public AudioClip eat;
-    public AudioClip handBrake;
-    public AudioClip boost;
-
+  public List<AudioClip> clips;
   private List<AudioSource> audioSources;
 
   private void Start()
   {
-    audioSources = new List<AudioSource>(GetComponents<AudioSource>());
+    audioSources = new List<AudioSource>();
+    for (int i = 0; i < clips.Count; i++) {
+      AudioSource source = gameObject.AddComponent(typeof(AudioSource)) as AudioSource;
+      source.clip = clips[i];
+      audioSources.Add(source);
+    }
   }
 
   public void playBork()
   {
-    playAudio(bork, 1, 1);
+    playAudio(0);
   }
 
   public void playStep(float pitch)
   {
-    playAudioOnSpecific(3, step, pitch, 0.5f);
+    playAudio(3, pitch, 0.5f);
   }
 
   public void playEat()
   {
-    playAudio(eat, 1, 1);
+    playAudio(1);
   }
 
-    public void playHandbrake()
-    {
-        playAudio(handBrake, 1, 1);
-    }
-    public void playBoost()
-    {
-        playAudio(boost, 1, 1);
-    }
-
-  private void playAudio(AudioClip clip, float pitch, float volume)
+  public void playHandbrake()
   {
-    for (int i = 0; i < audioSources.Count; i++) {
-      if (!audioSources[i].isPlaying) {
-        playAudioOnSpecific(i, clip, pitch, volume);
-        break;
-      }
-    }
+    playAudio(2);
+  }
+  public void playBoost()
+  {
+    playAudio(4);
   }
 
-  private void playAudioOnSpecific(int track, AudioClip clip, float pitch, float volume)
+  private void playAudio(int track, float pitch = 1.0f, float volume = 1.0f)
   {
-    if (audioSources.Count <= track || !audioSources[track]) {
-      Debug.Log("Track does " + track + " not exist! Length is: " + audioSources.Count);
+    if (clips.Count <= track || !clips[track]) {
+      Debug.Log("Track does " + track + " not exist! Length is: " + clips.Count);
       return;
     }
 
-    if (!(audioSources[track].time > 0)) {
-      audioSources[track].clip = clip;
+    if (!audioSources[track].isPlaying) {
       audioSources[track].pitch = pitch;
       audioSources[track].volume = volume;
       audioSources[track].Play();
