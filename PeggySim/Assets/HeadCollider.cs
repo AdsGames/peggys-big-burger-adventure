@@ -20,7 +20,7 @@ public class HeadCollider : MonoBehaviour
     }
 
     if (other.tag == "Segment" && other.name != "FirstBody") {
-        parent.breakTimer=0;
+      parent.breakTimer = 0;
       GameObject new_particle = Instantiate(explodeParticle);
       new_particle.transform.position = other.transform.position;
       other.GetComponent<HingeJoint>().connectedBody = null;
@@ -38,15 +38,12 @@ public class HeadCollider : MonoBehaviour
         Debug.Log("No sound manager");
       }
     }
-     if(other.tag=="Butt"){
-         if(!other.gameObject.GetComponent<ButtScript>().connected){
-
-            other.gameObject.transform.localScale = new Vector3(3.91f,3.91f,3.91f);
-
-            print("got ur butt");
-            parent.handleButtCollision(other);
-         }
-        
+    if (other.tag == "Butt") {
+      if(!other.gameObject.GetComponent<ButtScript>().connected){
+        other.gameObject.transform.localScale = new Vector3(3.91f,3.91f,3.91f);
+        print("got ur butt");
+        parent.handleButtCollision(other);
+      }
     }
   }
 }

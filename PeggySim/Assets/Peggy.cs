@@ -5,7 +5,7 @@ public class Peggy : MonoBehaviour
   public GameObject bodySegmentPrefab = null;
   public GameObject currentBodyStart = null;
   public GameObject itemParticle;
-  public float breakTimer=0;
+  public float breakTimer = 0;
   private Rigidbody rigidBody = null;
 
   private void Start()
@@ -46,7 +46,7 @@ public class Peggy : MonoBehaviour
 
   private void Update()
   {
-      breakTimer+=Time.deltaTime;
+    breakTimer += Time.deltaTime;
     if (Input.GetKeyDown(KeyCode.F)) {
       AddSegment();
     }

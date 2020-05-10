@@ -142,6 +142,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioSource: {fileID: 4826446916147996526}
   gameInfo: {fileID: 0}
-  pitchMultiplier: 0.1
-  maxPitch: 2
+  pitchMultiplier: 0.05
+  maxPitch: 3
   basePitch: 0.5
