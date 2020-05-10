@@ -11,13 +11,13 @@ public class Movement : MonoBehaviour
   public float drag;
   public float angularDrag;
   public float segmentFactor;
-    public bool isBoosting;
-    public float handBrakeSpeed;
-    public float maxhandBrakeMeter;
-    public float boostSpeed;
-    public float maxBoostMeter;
+  public bool isBoosting;
+  public float handBrakeSpeed;
+  public float maxhandBrakeMeter;
+  public float boostSpeed;
+  public float maxBoostMeter;
 
-        
+
 
   public SoundEffectManager soundManager;
   public GameInfo info;
@@ -26,16 +26,16 @@ public class Movement : MonoBehaviour
   private Rigidbody rigidBody;
   private Vector3 m_EulerAngleVelocity;
   private bool onGround = true;
-    private float effectiveTurnSpeed;
-    public float currentHandBrakeMeter;
-    private GameObject currentBoostParticle;
-    public GameObject boostParticle;
+  private float effectiveTurnSpeed;
+  public float currentHandBrakeMeter;
+  private GameObject currentBoostParticle;
+  public GameObject boostParticle;
 
 
-    private float effectiveMoveSpeed;
-    public float currentBoostMeter;
+  private float effectiveMoveSpeed;
+  public float currentBoostMeter;
 
-    private float targetXAngle;
+  private float targetXAngle;
 
   private void Start()
   {
@@ -69,52 +69,47 @@ public class Movement : MonoBehaviour
         rigidBody.AddRelativeTorque(new Vector3(0, -effectiveTurnSpeed * (turningReversed ? 1 : -1), 0), ForceMode.Acceleration);
       }
 
-            //Allan is a big dummy with stupid formatting
-            if (Input.GetButton("Fire1") && GameObject.FindGameObjectWithTag("Butt").GetComponent<ButtScript>().connected)
-            {
-              if(currentHandBrakeMeter > 0 ){
-                effectiveTurnSpeed = handBrakeSpeed;
-                currentHandBrakeMeter -= 1;
-                soundManager.playHandbrake();
-              }else{
-                effectiveTurnSpeed = turnSpeed;
-              }
-            }
-            else
-            {
-                effectiveTurnSpeed = turnSpeed;
-                if (currentHandBrakeMeter < maxhandBrakeMeter)
-                    currentHandBrakeMeter += 0.1f;
-            }
+      //Allan is a big dummy with stupid formatting
+      if (Input.GetButton("Fire1") && GameObject.FindGameObjectWithTag("Butt").GetComponent<ButtScript>().connected) {
+        if (currentHandBrakeMeter > 0) {
+          effectiveTurnSpeed = handBrakeSpeed;
+          currentHandBrakeMeter -= 1;
+          soundManager.playHandbrake();
+        } else {
+          effectiveTurnSpeed = turnSpeed;
+        }
+      } else {
+        effectiveTurnSpeed = turnSpeed;
+        if (currentHandBrakeMeter < maxhandBrakeMeter)
+          currentHandBrakeMeter += 0.1f;
+      }
 
-            if(Input.GetButton("Fire2") && GameObject.FindGameObjectWithTag("Butt").GetComponent<ButtScript>().connected)
-            {
-              if(currentBoostMeter>0){
-                if(!isBoosting)
-                    currentBoostParticle = Instantiate(boostParticle);
-                currentBoostParticle.transform.position = transform.position;
-                
-                
+      if (Input.GetButton("Fire2") && GameObject.FindGameObjectWithTag("Butt").GetComponent<ButtScript>().connected) {
+        if (currentBoostMeter > 0) {
+          if (!isBoosting)
+            currentBoostParticle = Instantiate(boostParticle);
+          currentBoostParticle.transform.position = transform.position;
 
-                  isBoosting = true;
-                  effectiveMoveSpeed = boostSpeed;
-                  currentBoostMeter -= 0.8f;
-                  soundManager.playBoost();
-              }else{
-                isBoosting = false;
-                effectiveMoveSpeed = moveSpeed;
-                Destroy(currentBoostParticle);
-              }
-            }
-            else
-            {
-              
-               Destroy(currentBoostParticle);
-                isBoosting = false;
-                effectiveMoveSpeed = moveSpeed;
-                if (currentBoostMeter < maxBoostMeter)
-                    currentBoostMeter += 0.1f;
-            }
+
+
+          isBoosting = true;
+          effectiveMoveSpeed = boostSpeed;
+          currentBoostMeter -= 0.8f;
+          soundManager.playBoost();
+        } else {
+          isBoosting = false;
+          effectiveMoveSpeed = moveSpeed;
+          Destroy(currentBoostParticle);
+        }
+      } else {
+
+        Destroy(currentBoostParticle);
+        isBoosting = false;
+        effectiveMoveSpeed = moveSpeed;
+        if (currentBoostMeter < maxBoostMeter) {
+          currentBoostMeter += 0.1f;
+        }
+      }
 
       if (Input.GetButton("Jump")) {
         rigidBody.AddRelativeForce(new Vector3(0, 50, 0), ForceMode.Impulse);
@@ -129,24 +124,24 @@ public class Movement : MonoBehaviour
     } else {
       rigidBody.drag = 0;
       rigidBody.angularDrag = 0;
-            transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+      transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
     }
   }
   private void OnTriggerStay(Collider other)
   {
-        if (other.tag == "Ground")
-            onGround = true;
+    if (other.tag == "Ground")
+      onGround = true;
   }
-    
-    private void OnCollisionEnter(Collision collision)
-    {
-        targetXAngle = Mathf.Abs(Vector3.Angle(collision.GetContact(0).normal, new Vector3(1, 0, 1).normalized) - 90);
 
-        if (onGround && collision.gameObject.tag == "Ground" && targetXAngle < 45)
-            transform.eulerAngles =  new Vector3(targetXAngle, transform.eulerAngles.y, 0);
-    }
-    
-    private void OnTriggerExit(Collider other)
+  private void OnCollisionEnter(Collision collision)
+  {
+    targetXAngle = Mathf.Abs(Vector3.Angle(collision.GetContact(0).normal, new Vector3(1, 0, 1).normalized) - 90);
+
+    if (onGround && collision.gameObject.tag == "Ground" && targetXAngle < 45)
+      transform.eulerAngles = new Vector3(targetXAngle, transform.eulerAngles.y, 0);
+  }
+
+  private void OnTriggerExit(Collider other)
   {
     if (other.tag == "Ground")
       onGround = false;
