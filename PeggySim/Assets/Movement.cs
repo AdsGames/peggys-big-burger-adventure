@@ -32,6 +32,8 @@ public class Movement : MonoBehaviour
     private float effectiveMoveSpeed;
     public float currentBoostMeter;
 
+    private float targetXAngle;
+
   private void Start()
   {
     // Set the axis the Rigidbody rotates in (100 in the y axis)
@@ -105,14 +107,24 @@ public class Movement : MonoBehaviour
     } else {
       rigidBody.drag = 0;
       rigidBody.angularDrag = 0;
+            transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
     }
   }
   private void OnTriggerStay(Collider other)
   {
-    if (other.tag == "Ground")
-      onGround = true;
+        if (other.tag == "Ground")
+            onGround = true;
   }
-  private void OnTriggerExit(Collider other)
+    
+    private void OnCollisionEnter(Collision collision)
+    {
+        targetXAngle = Mathf.Abs(Vector3.Angle(collision.GetContact(0).normal, new Vector3(1, 0, 1).normalized) - 90);
+
+        if (onGround && collision.gameObject.tag == "Ground" && targetXAngle < 45)
+            transform.eulerAngles =  new Vector3(targetXAngle, transform.eulerAngles.y, 0);
+    }
+    
+    private void OnTriggerExit(Collider other)
   {
     if (other.tag == "Ground")
       onGround = false;
