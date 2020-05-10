@@ -78,6 +78,6 @@ public class Intro : MonoBehaviour
         GameObject.Find("MainMusic").GetComponent<AudioSource>().enabled = true;
         SoundMan.playBork();
         go.transform.GetChild(0).GetComponent<Text>().enabled = false;
-        Debug.Log("Ding!");
+
     }
 }
