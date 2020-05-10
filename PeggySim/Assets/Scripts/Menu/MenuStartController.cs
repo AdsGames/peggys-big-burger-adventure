@@ -15,6 +15,6 @@ public class MenuStartController : MonoBehaviour
 
   private void HandleStart()
   {
-    SceneManager.LoadScene(sceneName: "Level1");
+    SceneManager.LoadScene(sceneName: "AllanLand");
   }
 }

@@ -6,9 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Splash.unity
+    guid: 84468ed4586b2c74e8d8c3ae67a37303
+  - enabled: 1
     path: Assets/Scenes/Menu.unity
     guid: cf085469b9a03a840b4ba9717ecd9357
   - enabled: 1
-    path: Assets/Scenes/Level1.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
+    path: Assets/Scenes/AllanLand.unity
+    guid: 2a603aa033f74144ba3ae0ac479c4a78
   m_configObjects: {}
