@@ -7,6 +7,9 @@ public class Peggy : MonoBehaviour
 
     public GameObject bodySegmentPrefab;
     public GameObject currentBodyStart;
+    public GameObject explodeParticle;
+    public GameObject itemParticle;
+
 
     private float speed = 10;
     private float rotation_speed = 2;
@@ -33,6 +36,11 @@ public class Peggy : MonoBehaviour
         if(other.tag == "Food"){
             addSegment();
             Destroy(other);
+ 
+            GameObject new_particle = Instantiate(itemParticle);
+            new_particle.transform.position = other.transform.position;
+
+
       
         }
     }

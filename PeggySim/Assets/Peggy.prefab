@@ -471,6 +471,10 @@ MonoBehaviour:
   bodySegmentPrefab: {fileID: 6397360858029497203, guid: 858ca78b1216b9275a0bf868c71bdf97,
     type: 3}
   currentBodyStart: {fileID: 4231065663354307347}
+  explodeParticle: {fileID: 1828176872806910, guid: 64891a0eb28db934898420d80ca07cb3,
+    type: 3}
+  itemParticle: {fileID: 1329845292236604, guid: 9bba9cf244c53c5439505dfc96fdd11c,
+    type: 3}
   m_Rigidbody: {fileID: 7290895458191596422}
   Food: {fileID: 1892928331037838605, guid: 763cf4f9b42c81397a585ea4a795d32d, type: 3}
 --- !u!136 &7753370908953722268

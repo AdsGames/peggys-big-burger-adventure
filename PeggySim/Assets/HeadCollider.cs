@@ -14,6 +14,9 @@ public class HeadCollider : MonoBehaviour
         //if(other!=null){
         if(other.tag == "Segment" && other.name !="FirstBody"){
 
+            GameObject new_particle = Instantiate(parent.explodeParticle);
+            new_particle.transform.position = other.transform.position;
+
             dead=true;
             //Destroy(other.GetComponent<HingeJoint>().connectedBody.gameObject);
             other.GetComponent<HingeJoint>().connectedBody = null;
