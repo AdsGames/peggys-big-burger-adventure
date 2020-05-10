@@ -35,7 +35,7 @@ jobs:
           buildName: PeggySim
 
       - name: Copy in extra pages assets
-        run: cp -r ./pages/* ./build
+        run: sudo cp -r ./pages/* ./build
 
       - name: Deploy to GitHub pages
         uses: JamesIves/github-pages-deploy-action@releases/v3
