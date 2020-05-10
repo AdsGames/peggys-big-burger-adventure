@@ -389,7 +389,11 @@ MonoBehaviour:
   turningReversed: 0
   drag: 1
   angularDrag: 5
-  segmentFactor: 0.1
+  segmentFactor: 0.05
+  handBrakeSpeed: 30
+  maxhandBrakeMeter: 50
+  boostSpeed: 60
+  maxBoostMeter: 50
   soundManager: {fileID: 0}
   info: {fileID: 0}
 --- !u!114 &4435409573249997459
