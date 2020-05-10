@@ -28,16 +28,20 @@ public class FollowCam : MonoBehaviour
     player = GameObject.FindGameObjectWithTag("Head");
     info = GameObject.FindGameObjectWithTag("GameInfo").GetComponent<GameInfo>(); ;
     cam = GetComponent<Camera>();
-
   }
 
   // Update is called once per frame
   private void FixedUpdate()
   {
-    transform.position = Vector3.SmoothDamp(transform.position,
-        new Vector3(cameraGhost.transform.position.x, cameraGhost.transform.position.y,
-        cameraGhost.transform.position.z),
-        ref velocity, speed
+    transform.position = Vector3.SmoothDamp(
+      transform.position,
+      new Vector3(
+        cameraGhost.transform.position.x,
+        cameraGhost.transform.position.y,
+        cameraGhost.transform.position.z
+      ),
+      ref velocity,
+      speed
     );
 
     cam.fieldOfView = Mathf.Clamp(Mathf.Lerp(cam.fieldOfView, (player.GetComponent<Rigidbody>().velocity.magnitude * FOVFactor) + baseFov, 0.2f), 45, 85);

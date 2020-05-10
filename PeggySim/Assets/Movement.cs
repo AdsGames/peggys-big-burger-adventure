@@ -16,19 +16,19 @@ public class Movement : MonoBehaviour
   public GameInfo info;
 
   private List<GameObject> wheels;
-  private Rigidbody m_Rigidbody;
+  private Rigidbody rigidBody;
   private Vector3 m_EulerAngleVelocity;
   private bool onGround = true;
 
   private void Start()
   {
-    //Set the axis the Rigidbody rotates in (100 in the y axis)
+    // Set the axis the Rigidbody rotates in (100 in the y axis)
     m_EulerAngleVelocity = new Vector3(0, 100, 0);
 
-    //Fetch the Rigidbody from the GameObject with this script attached
-    m_Rigidbody = GetComponent<Rigidbody>();
-    m_Rigidbody.drag = drag;
-    m_Rigidbody.angularDrag = angularDrag;
+    // Fetch the Rigidbody from the GameObject with this script attached
+    rigidBody = GetComponent<Rigidbody>();
+    rigidBody.drag = drag;
+    rigidBody.angularDrag = angularDrag;
 
     wheels = new List<GameObject>();
     foreach (Transform child in transform) {
@@ -41,29 +41,29 @@ public class Movement : MonoBehaviour
   private void FixedUpdate()
   {
     if (onGround) {
-      m_Rigidbody.drag = drag;
-      m_Rigidbody.angularDrag = angularDrag;
-      m_Rigidbody.AddRelativeForce(new Vector3(0, 0, moveSpeed * (movementReversed ? 1 : -1) * ((info.getSegments() * segmentFactor) + 1)), ForceMode.Acceleration);
+      rigidBody.drag = drag;
+      rigidBody.angularDrag = angularDrag;
+      rigidBody.AddRelativeForce(new Vector3(0, 0, moveSpeed * (movementReversed ? 1 : -1) * ((info.getSegments() * segmentFactor) + 1)), ForceMode.Acceleration);
 
       if (Input.GetAxis("Horizontal") < 0) {
-        m_Rigidbody.AddRelativeTorque(new Vector3(0, turnSpeed * (turningReversed ? 1 : -1), 0), ForceMode.Acceleration);
+        rigidBody.AddRelativeTorque(new Vector3(0, turnSpeed * (turningReversed ? 1 : -1), 0), ForceMode.Acceleration);
       } else if (Input.GetAxis("Horizontal") > 0) {
-        m_Rigidbody.AddRelativeTorque(new Vector3(0, -turnSpeed * (turningReversed ? 1 : -1), 0), ForceMode.Acceleration);
+        rigidBody.AddRelativeTorque(new Vector3(0, -turnSpeed * (turningReversed ? 1 : -1), 0), ForceMode.Acceleration);
       }
 
       if (Input.GetButton("Jump")) {
-        m_Rigidbody.AddRelativeForce(new Vector3(0, 50, 0), ForceMode.Impulse);
+        rigidBody.AddRelativeForce(new Vector3(0, 50, 0), ForceMode.Impulse);
       }
 
 
       if (soundManager) {
-        soundManager.playStep(m_Rigidbody.velocity.magnitude / 50f);
+        soundManager.playStep(rigidBody.velocity.magnitude / 50f);
       } else {
         Debug.Log("No sound manager");
       }
     } else {
-      m_Rigidbody.drag = 0;
-      m_Rigidbody.angularDrag = 0;
+      rigidBody.drag = 0;
+      rigidBody.angularDrag = 0;
     }
   }
   private void OnTriggerStay(Collider other)
