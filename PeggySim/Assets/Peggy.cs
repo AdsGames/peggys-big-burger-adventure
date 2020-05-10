@@ -11,6 +11,8 @@ public class Peggy : MonoBehaviour
     private float speed = 10;
     private float rotation_speed = 2;
 
+    private Random rnd;
+
     
     public Rigidbody m_Rigidbody;
     public GameObject Food;
@@ -22,6 +24,8 @@ public class Peggy : MonoBehaviour
         //Fetch the Rigidbody from the GameObject with this script attached
         m_Rigidbody = GetComponent<Rigidbody>();
 
+        rnd = new Random();
+
 
 
     }
@@ -29,9 +33,7 @@ public class Peggy : MonoBehaviour
         if(other.tag == "Food"){
             addSegment();
             Destroy(other);
-            float range = 25;
-            GameObject new_food = Instantiate(Food);
-            new_food.transform.position = new Vector3(Random.Range(-range,range),1,Random.Range(-range,range));
+      
         }
     }
     void addSegment(){

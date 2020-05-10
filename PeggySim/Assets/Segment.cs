@@ -12,9 +12,12 @@ public class Segment : MonoBehaviour
     }
 
     void Update(){
-        if(joint.connectedBody==null || joint.connectedBody.gameObject.tag=="SegmentDead"){
+        if(joint!=null){
+            if(joint.connectedBody==null || joint.connectedBody.gameObject.tag=="SegmentDead"){
            
-            gameObject.tag = "SegmentDead";
+                gameObject.tag = "SegmentDead";
+                Destroy(joint);
+            }
         }
     }
 }
