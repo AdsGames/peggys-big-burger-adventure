@@ -21,7 +21,6 @@ public class RespawnScript : MonoBehaviour
     );
   }
 
-  // Update is called once per frame
   private void Update()
   {
     if (spawnedItem == null) {

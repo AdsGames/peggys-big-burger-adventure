@@ -1,34 +1,28 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class HeadCollider : MonoBehaviour
 {
-    public bool dead=false;
-    private Peggy parent;
+  private Peggy parent;
 
-    // Start is called before ur butt
-        private void OnTriggerEnter(Collider other)
-    {
-        parent.handleCollision(other.gameObject);
-        //if(other!=null){
-        if(other.tag == "Segment" && other.name !="FirstBody"){
+  private void Start()
+  {
+    parent = transform.parent.GetComponent<Peggy>();
+  }
 
-            dead=true;
-            //Destroy(other.GetComponent<HingeJoint>().connectedBody.gameObject);
-            other.GetComponent<HingeJoint>().connectedBody = null;
-            
-        }
-        //}    
-    }
-    void Start()
-    {
-        parent = this.transform.parent.GetComponent<Peggy>();
+  private void OnTriggerEnter(Collider other)
+  {
+    if (!other || !parent) {
+      Debug.Log("Other or parent is null!");
+      return;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    if (other.tag == "Segment" && other.name != "FirstBody") {
+      other.GetComponent<HingeJoint>().connectedBody = null;
     }
+
+    if (other.tag == "Food") {
+      parent.AddSegment();
+      Destroy(other.gameObject);
+    }
+  }
 }
