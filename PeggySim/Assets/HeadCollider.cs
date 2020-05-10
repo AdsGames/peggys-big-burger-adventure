@@ -39,10 +39,11 @@ public class HeadCollider : MonoBehaviour
       }
     }
     if (other.tag == "Butt") {
-
-      print("got ur butt");
-      parent.handleButtCollision(other);
-
+      if(!other.gameObject.GetComponent<ButtScript>().connected){
+        other.gameObject.transform.localScale = new Vector3(3.91f,3.91f,3.91f);
+        print("got ur butt");
+        parent.handleButtCollision(other);
+      }
     }
   }
 }

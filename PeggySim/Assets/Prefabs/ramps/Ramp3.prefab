@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5778424265598179869}
   - component: {fileID: 3272446762458357803}
   - component: {fileID: 9103632563255041234}
+  - component: {fileID: 3497154106496255615}
   m_Layer: 0
   m_Name: Ramp3
   m_TagString: Ground
@@ -79,3 +80,17 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &3497154106496255615
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7379798462242285582}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -1972945094920460880, guid: f2cdfb4461486404f95feebdd9fcf39e, type: 3}
