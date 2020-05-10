@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Peggy Sim 2020</title>
+    <link rel="shortcut icon" href="WebGL/PeggySim/TemplateData/favicon.ico" />
+    <link rel="stylesheet" href="WebGL/PeggySim/TemplateData/style.css" />
+    <script src="WebGL/PeggySim/TemplateData/UnityProgress.js"></script>
+    <script src="WebGL/PeggySim/Build/UnityLoader.js"></script>
+    <script>
+      var unityInstance = UnityLoader.instantiate(
+        "unityContainer",
+        "WebGL/PeggySim/Build/PeggySim.json",
+        { onProgress: UnityProgress }
+      );
+    </script>
+    <style>
+      html {
+        background: url("images/background.jpg"), #000;
+        background-size: 300px auto;
+      }
+      .main-container {
+        width: max-content;
+        box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
+        min-height: 100px;
+        margin: 10px auto;
+        background-color: #fff;
+      }
+      .title {
+        font-family: Monospace;
+        text-align: center;
+        padding: 20px;
+        width: 100%;
+      }
+      .foot {
+        height: 50px;
+        display: flex;
+        align-items: center;
+      }
+      .full-button {
+        width: 50px;
+        height: 50px;
+        background: url("images/fullscreen.svg"), #449 no-repeat;
+        background-size: 60% 60%;
+        background-repeat: no-repeat;
+        background-position: center center;
+        transition: all 0.2s;
+      }
+      .full-button:hover {
+        background: url("images/fullscreen.svg"), #55a no-repeat;
+        background-size: 80% 80%;
+        background-repeat: no-repeat;
+        background-position: center center;
+      }
+      .full-screen-text {
+        font-size: 18px;
+        font-family: Monospace;
+        padding: 10px;
+      }
+      .webgl-wrap {
+        position: relative;
+        width: 960px;
+        height: 600px;
+      }
+    </style>
+  </head>
+  <body class="main-container">
+    <h1 class="title">Peggy Simulator 2020</h1>
+    <div class="webgl-wrap">
+    <div class="webgl-content">
+      <div id="unityContainer" style="width: 960px; height: 600px;"></div>
+    </div>
+  </div>
+    <div class="foot">
+      <div class="full-button" onclick="unityInstance.SetFullscreen(1)"></div>
+      <p class="full-screen-text">Full Screen</p>
+    </div>
+  </body>
+</html>
