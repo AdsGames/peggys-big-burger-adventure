@@ -15,14 +15,16 @@ public class Movement : MonoBehaviour
 
     public List<GameObject> wheels;
 
-    private GameObject head;
+    public GameObject head;
 
     private GameInfo info;
 
     public Rigidbody m_Rigidbody;
     Vector3 m_EulerAngleVelocity;
 
-    private bool onGround = false;
+    private bool onGround = true;
+
+    private SoundEffectManager SoundMan;
 
     // Start is called before the first frame update
     void Start()
@@ -47,6 +49,7 @@ public class Movement : MonoBehaviour
         }
 
         info = GameObject.FindGameObjectWithTag("GameInfo").GetComponent<GameInfo>();
+        SoundMan = GameObject.FindGameObjectWithTag("SoundEffectManager").GetComponent<SoundEffectManager>();
     }
 
     // Update is called once per frame
@@ -93,6 +96,9 @@ public class Movement : MonoBehaviour
             {
                 m_Rigidbody.AddRelativeForce(new Vector3(0, 50, 0), ForceMode.Impulse);
             }
+
+            SoundMan.playStep(m_Rigidbody.velocity.magnitude / 50f);
+
         }
         else
         {
@@ -100,7 +106,6 @@ public class Movement : MonoBehaviour
             m_Rigidbody.angularDrag = 0;
 
         }
-        Debug.Log(info.getSegments());
     }
     private void OnTriggerStay(Collider other)
     {
