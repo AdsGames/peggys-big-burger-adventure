@@ -4,9 +4,11 @@ public class Peggy : MonoBehaviour
 {
   public GameObject bodySegmentPrefab = null;
   public GameObject currentBodyStart = null;
-  public GameObject itemParticle;
-  public float breakTimer = 0;
+  public GameObject itemParticle = null;
+  public SoundEffectManager soundManager = null;
+
   private Rigidbody rigidBody = null;
+  public float breakTimer = 0.0f;
 
   private void Start()
   {
@@ -25,24 +27,26 @@ public class Peggy : MonoBehaviour
     currentBodyStart.name = "Body";
     currentBodyStart = newSegment;
   }
-   public void handleButtCollision(Collider other){
-        if(breakTimer>2){
-            GameObject[] list = GameObject.FindGameObjectsWithTag("Segment");
-            GameObject oldest = list[0];
-            for(int i=0; i<list.Length; i++){
-                if(oldest.GetComponent<Segment>().getAge()>list[i].GetComponent<Segment>().getAge())
-                    oldest = list[i];
-              }
-            other.gameObject.transform.position = oldest.transform.position;
-            other.gameObject.transform.rotation = oldest.transform.rotation;
 
-
-            other.gameObject.GetComponent<HingeJoint>().connectedBody = oldest.GetComponent<Rigidbody>();
-
-            GameObject new_particle = Instantiate(itemParticle);
-            new_particle.transform.position = transform.position;
+  public void handleButtCollision(Collider other)
+  {
+    if (breakTimer > 2) {
+      GameObject[] list = GameObject.FindGameObjectsWithTag("Segment");
+      GameObject oldest = list[0];
+      for (int i = 0; i < list.Length; i++) {
+        if (oldest.GetComponent<Segment>().getAge() > list[i].GetComponent<Segment>().getAge()) {
+          oldest = list[i];
         }
+      }
+      other.gameObject.transform.position = oldest.transform.position;
+      other.gameObject.transform.rotation = oldest.transform.rotation;
+      other.gameObject.GetComponent<HingeJoint>().connectedBody = oldest.GetComponent<Rigidbody>();
+
+      GameObject new_particle = Instantiate(itemParticle);
+      new_particle.transform.position = transform.position;
+      soundManager.playLegsRetreived();
     }
+  }
 
   private void Update()
   {

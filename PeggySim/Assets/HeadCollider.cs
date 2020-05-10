@@ -24,6 +24,10 @@ public class HeadCollider : MonoBehaviour
       GameObject new_particle = Instantiate(explodeParticle);
       new_particle.transform.position = other.transform.position;
       other.GetComponent<HingeJoint>().connectedBody = null;
+
+      if (GameObject.FindGameObjectWithTag("Butt").GetComponent<ButtScript>().connected) {
+        soundManager.playLegsLost();
+      }
     }
 
     if (other.tag == "Food") {
@@ -38,9 +42,10 @@ public class HeadCollider : MonoBehaviour
         Debug.Log("No sound manager");
       }
     }
+
     if (other.tag == "Butt") {
-      if(!other.gameObject.GetComponent<ButtScript>().connected){
-        other.gameObject.transform.localScale = new Vector3(3.91f,3.91f,3.91f);
+      if (!other.gameObject.GetComponent<ButtScript>().connected) {
+        other.gameObject.transform.localScale = new Vector3(3.91f, 3.91f, 3.91f);
         print("got ur butt");
         parent.handleButtCollision(other);
       }

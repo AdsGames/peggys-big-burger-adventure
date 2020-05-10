@@ -8,18 +8,9 @@ public class SpawnerController : MonoBehaviour
 
   public GameObject item = null;
   private GameObject spawnedItem = null;
-  private BoxCollider boxCollider = null;
 
   private void Start()
   {
-    // Move box collider to spawn height
-    boxCollider = GetComponent<BoxCollider>();
-    boxCollider.center = new Vector3(
-      boxCollider.center.x,
-      boxCollider.center.y + spawnHeight,
-      boxCollider.center.z
-    );
-
     // Spawn immediately
     time = respawnTime;
   }
