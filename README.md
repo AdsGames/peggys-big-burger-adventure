@@ -4,4 +4,4 @@
 Tojam Hindsight game
 
 ## Demo
-[https://adsgames.github.io/PeggySim/](https://adsgames.github.io/PeggysBigBurgerAdventure/)
+[https://adsgames.github.io/PeggysBigBurgerAdventure/](https://adsgames.github.io/PeggysBigBurgerAdventure/)
