@@ -6,6 +6,9 @@ on:
       - main
     tags:
       - v*
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: read
@@ -25,7 +28,7 @@ jobs:
         with:
           lfs: true
 
-      - uses: actions/cache@v1.1.0
+      - uses: actions/cache@v3
         with:
           path: PeggySim/Library
           key: Library-PeggySim-WebGL
@@ -34,7 +37,7 @@ jobs:
             Library-
 
       - name: Build Unity Project
-        uses: webbertakken/unity-builder@v0.15
+        uses: webbertakken/unity-builder@v2
         env:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
