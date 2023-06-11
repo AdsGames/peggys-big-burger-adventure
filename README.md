@@ -1,7 +1,9 @@
-# PeggySim
-![Build Unity Project](https://github.com/AdsGames/PeggySim/workflows/Build%20Unity%20Project/badge.svg)
+# peggys-big-burger-adventure
+
+![Build Unity Project](https://github.com/AdsGames/PeggySim/workflows/Deploy%20Game/badge.svg)
 
 Tojam Hindsight game
 
 ## Demo
-[https://adsgames.github.io/PeggysBigBurgerAdventure/](https://adsgames.github.io/PeggysBigBurgerAdventure/)
+
+[https://adsgames.github.io/peggys-big-burger-adventure/](https://adsgames.github.io/peggys-big-burger-adventure/)
