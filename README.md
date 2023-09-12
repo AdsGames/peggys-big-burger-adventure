@@ -2,7 +2,7 @@
 
 ![Build Unity Project](https://github.com/AdsGames/PeggySim/workflows/Deploy%20Game/badge.svg)
 
-Tojam Hindsight game
+Tojam Hindsight game. Eat burger.
 
 ## Demo
 
