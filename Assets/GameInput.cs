@@ -25,16 +25,20 @@ public static class GameInput
     // so without this a resting stick that's slightly off centre steers constantly
     Turn.AddBinding("<Gamepad>/leftStick/x").WithProcessor("axisDeadzone");
 
-    Handbrake.AddBinding("<Keyboard>/leftCtrl");
-    Handbrake.AddBinding("<Mouse>/leftButton");
-    Handbrake.AddBinding("<Gamepad>/buttonSouth");
+    // Peggy always runs forward, so up and down are free for speeding up and sliding.
+    // No modifier keys: in the browser, Ctrl and Alt combos clash with shortcuts like Ctrl+D.
+    Handbrake.AddBinding("<Keyboard>/s");
+    Handbrake.AddBinding("<Keyboard>/downArrow");
+    Handbrake.AddBinding("<Gamepad>/leftTrigger");
+    Handbrake.AddBinding("<Gamepad>/rightShoulder");
 
-    Boost.AddBinding("<Keyboard>/leftAlt");
-    Boost.AddBinding("<Mouse>/rightButton");
-    Boost.AddBinding("<Gamepad>/buttonEast");
+    Boost.AddBinding("<Keyboard>/w");
+    Boost.AddBinding("<Keyboard>/upArrow");
+    Boost.AddBinding("<Keyboard>/leftShift");
+    Boost.AddBinding("<Gamepad>/rightTrigger");
 
     Jump.AddBinding("<Keyboard>/space");
-    Jump.AddBinding("<Gamepad>/buttonNorth");
+    Jump.AddBinding("<Gamepad>/buttonSouth");
 
     DebugAddSegment.AddBinding("<Keyboard>/f");
 

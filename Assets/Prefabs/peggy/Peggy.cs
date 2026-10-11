@@ -14,6 +14,11 @@ public class Peggy : MonoBehaviour
   private Rigidbody rigidBody = null;
   private ButtScript butt = null;
   private HingeJoint buttJoint = null;
+  private Rigidbody buttBody = null;
+  private Vector3 buttScale;
+  // Where the butt sits relative to the segment it hangs off, recorded from the prefab at start
+  private Vector3 buttOffset;
+  private Quaternion buttRotationOffset;
   public float breakTimer = 0.0f;
 
   private void Start()
@@ -21,11 +26,17 @@ public class Peggy : MonoBehaviour
     rigidBody = GetComponent<Rigidbody>();
     butt = GameObject.FindGameObjectWithTag("Butt").GetComponent<ButtScript>();
     buttJoint = butt.GetComponent<HingeJoint>();
+    buttBody = butt.GetComponent<Rigidbody>();
+
+    Transform buttParent = buttJoint.connectedBody ? buttJoint.connectedBody.transform : currentBodyStart.transform;
+    buttOffset = buttParent.InverseTransformPoint(butt.transform.position);
+    buttRotationOffset = Quaternion.Inverse(buttParent.rotation) * butt.transform.rotation;
 
     // The chain is held together by hinges, not the hierarchy. Left as children, every
     // segment gets dragged rigidly whenever the head's rotation is set directly.
     currentBodyStart.transform.SetParent(transform.parent, true);
     butt.transform.SetParent(transform.parent, true);
+    buttScale = butt.transform.localScale; // after detaching, so it's the real on-screen size
   }
 
   /// <summary>
@@ -33,7 +44,7 @@ public class Peggy : MonoBehaviour
   /// </summary>
   public void AddSegment()
   {
-    Segment tail = Segment.FindTail();
+    Segment tail = Segment.ChainTail(rigidBody);
     GameObject newSegment;
     Rigidbody attachTo;
 
@@ -51,15 +62,42 @@ public class Peggy : MonoBehaviour
       attachTo = rigidBody;
     }
 
-    // Slide the butt back by one segment and move it onto the new tail.
-    // Position first so the hinge auto-configures its anchor from the new pose.
-    if (tail && butt.connected && buttJoint.connectedBody == tail.Body) {
-      butt.transform.position += newSegment.transform.position - tail.transform.position;
-      Physics.SyncTransforms();
-      buttJoint.connectedBody = newSegment.GetComponent<Rigidbody>();
-    }
+    Rigidbody newBody = newSegment.GetComponent<Rigidbody>();
+    newBody.linearVelocity = attachTo.linearVelocity;
+    Hinge(newSegment.GetComponent<HingeJoint>(), attachTo);
 
-    newSegment.GetComponent<HingeJoint>().connectedBody = attachTo;
+    // The legs always go on the very end, wherever they were hanging before
+    if (butt.connected) {
+      AttachButt(newBody);
+    }
+  }
+
+  /// <summary>
+  /// Connects a joint to a body at their current relative pose. Sets the anchor explicitly
+  /// rather than trusting auto-configure to pick up a pose that was only just moved.
+  /// </summary>
+  private static void Hinge(HingeJoint joint, Rigidbody to)
+  {
+    joint.autoConfigureConnectedAnchor = false;
+    joint.connectedBody = to;
+    joint.connectedAnchor = to.transform.InverseTransformPoint(joint.transform.TransformPoint(joint.anchor));
+  }
+
+  /// <summary>
+  /// Puts the butt in its usual spot behind a segment and hinges it there
+  /// </summary>
+  private void AttachButt(Rigidbody segment)
+  {
+    Transform parent = segment.transform;
+    Vector3 position = parent.TransformPoint(buttOffset);
+    Quaternion rotation = parent.rotation * buttRotationOffset;
+
+    butt.transform.SetPositionAndRotation(position, rotation);
+    buttBody.position = position;
+    buttBody.rotation = rotation;
+    buttBody.linearVelocity = segment.linearVelocity;
+    buttBody.angularVelocity = Vector3.zero;
+    Hinge(buttJoint, segment);
   }
 
   public void HandleButtCollision(Collider other)
@@ -69,19 +107,16 @@ public class Peggy : MonoBehaviour
       return;
     }
 
-    Segment tail = Segment.FindTail();
+    Segment tail = Segment.ChainTail(rigidBody);
     if (!tail)
     {
       return;
     }
 
-    other.gameObject.transform.localScale = new Vector3(3.91f, 3.91f, 3.91f);
-    other.gameObject.transform.position = tail.transform.position;
-    other.gameObject.transform.rotation = tail.transform.rotation;
-    other.gameObject.GetComponent<HingeJoint>().connectedBody = tail.Body;
+    butt.transform.localScale = buttScale;
+    AttachButt(tail.Body);
 
-    GameObject new_particle = Instantiate(itemParticle);
-    new_particle.transform.position = transform.position;
+    Effects.PlayOnce(itemParticle, transform.position);
     if (soundManager)
     {
       soundManager.playLegsRetreived();

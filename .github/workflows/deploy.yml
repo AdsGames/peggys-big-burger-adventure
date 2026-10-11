@@ -10,63 +10,138 @@ on:
     branches:
       - main
 
+# A newer push to the same branch or PR supersedes a build still in progress
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 jobs:
-  deploy:
-    name: Deploy
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
+    name: Build ${{ matrix.targetPlatform }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        targetPlatform:
+          - WebGL
+          - StandaloneWindows64
+          - StandaloneLinux64
+          - StandaloneOSX
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           lfs: true
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
-          path: PeggySim/Library
-          key: Library-PeggySim-WebGL
+          path: Library
+          key: Library-${{ matrix.targetPlatform }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
           restore-keys: |
-            Library-PeggySim-
+            Library-${{ matrix.targetPlatform }}-
             Library-
 
-      - name: Build Unity Project
-        uses: webbertakken/unity-builder@v2
+      - name: Build Unity project
+        uses: game-ci/unity-builder@v4
         env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
         with:
-          unityVersion: 2019.3.12f1
-          targetPlatform: WebGL
-          projectPath: PeggySim
+          unityVersion: auto
+          targetPlatform: ${{ matrix.targetPlatform }}
           buildName: PeggySim
 
-      - name: Copy in extra pages assets
-        run: sudo cp -r ./pages/* ./build
+      # Artifacts drop file permissions, and the Linux and Mac builds need their executable bit
+      - name: Pack build
+        run: tar -cf build-${{ matrix.targetPlatform }}.tar -C build/${{ matrix.targetPlatform }} .
 
-      - uses: actions/upload-pages-artifact@v1
+      - uses: actions/upload-artifact@v4
         with:
-          path: ./build
+          name: build-${{ matrix.targetPlatform }}
+          path: build-${{ matrix.targetPlatform }}.tar
+          retention-days: 7
+
+  pages:
+    name: Deploy to GitHub Pages
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout pages assets
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: pages
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: build-WebGL
+
+      # The WebGL build lands in WebGL/PeggySim, with the wrapper page from pages/ at the root
+      - name: Assemble site
+        run: |
+          mkdir -p site/WebGL
+          tar -xf build-WebGL.tar -C site/WebGL
+          cp -r pages/* site/
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
 
       - name: Deploy to GitHub Pages
-        if: github.ref == 'refs/heads/main'
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4
+
+  adsgames:
+    name: Deploy ${{ matrix.platform }} to A.D.S. Games
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # dir is the folder to upload inside the build; web needs the one holding index.html
+          - targetPlatform: WebGL
+            platform: WEB
+            dir: PeggySim
+          - targetPlatform: StandaloneWindows64
+            platform: WINDOWS
+            dir: ""
+          - targetPlatform: StandaloneLinux64
+            platform: LINUX
+            dir: ""
+          - targetPlatform: StandaloneOSX
+            platform: MAC
+            dir: ""
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: build-${{ matrix.targetPlatform }}
+
+      - name: Unpack build
+        run: |
+          mkdir build
+          tar -xf build-${{ matrix.targetPlatform }}.tar -C build
 
       - name: Deploy to A.D.S. Games
-        if: startsWith(github.ref, 'refs/tags/v')
-        uses: adsgames/deploy-to-adsgames@v1.1.2
+        uses: adsgames/deploy-to-adsgames@v1
         with:
           project-id: peggys-big-burger-adventure
-          build-dir: ./build/
-          platform: WEB
-          bucket-access-key: ${{ secrets.LINODE_BUCKET_ACCESS_KEY }}
-          bucket-secret-key: ${{ secrets.LINODE_BUCKET_SECRET_KEY }}
+          version: ${{ github.ref_name }}
+          build-dir: build/${{ matrix.dir }}
+          platform: ${{ matrix.platform }}
           api-key: ${{ secrets.ADSGAMES_API_KEY }}

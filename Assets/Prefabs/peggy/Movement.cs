@@ -15,13 +15,13 @@ public class Movement : MonoBehaviour
   [Tooltip("Forward acceleration while boosting")]
   public float boostSpeed = 60f;
   [Tooltip("Extra acceleration per body segment, so a longer Peggy keeps up")]
-  public float segmentFactor = 0.05f;
+  public float segmentFactor = 0.2f;
   [Tooltip("Linear damping on the ground. Top speed is roughly acceleration / drag")]
   public float drag = 1f;
 
   [Header("Turning")]
   [Tooltip("Turn rate in degrees per second")]
-  public float turnRate = 115f;
+  public float turnRate = 145f;
   [Tooltip("Turn rate in degrees per second while the handbrake is held")]
   public float handbrakeTurnRate = 345f;
   [Tooltip("How quickly turning reaches full rate and stops again. Higher feels snappier")]
@@ -152,7 +152,7 @@ public class Movement : MonoBehaviour
 
   private void Run()
   {
-    float acceleration = (isBoosting ? boostSpeed : moveSpeed) * (1f + Segment.AliveCount * segmentFactor);
+    float acceleration = (isBoosting ? boostSpeed : moveSpeed) * (1.2f + Segment.AliveCount * segmentFactor);
 
     // Peggy's model faces down her local -Z
     rigidBody.AddRelativeForce(Vector3.back * acceleration, ForceMode.Acceleration);

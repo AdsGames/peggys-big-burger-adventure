@@ -5,16 +5,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Peggy Sim 2020</title>
     <link rel="shortcut icon" href="WebGL/PeggySim/TemplateData/favicon.ico" />
-    <link rel="stylesheet" href="WebGL/PeggySim/TemplateData/style.css" />
-    <script src="WebGL/PeggySim/TemplateData/UnityProgress.js"></script>
-    <script src="WebGL/PeggySim/Build/UnityLoader.js"></script>
-    <script>
-      var unityInstance = UnityLoader.instantiate(
-        "unityContainer",
-        "WebGL/PeggySim/Build/PeggySim.json",
-        { onProgress: UnityProgress }
-      );
-    </script>
     <style>
       html {
         background: url("images/background.jpg"), #000;
@@ -46,6 +36,8 @@
         background-repeat: no-repeat;
         background-position: center center;
         transition: all 0.2s;
+        border: none;
+        cursor: pointer;
       }
       .full-button:hover {
         background: url("images/fullscreen.svg"), #55a no-repeat;
@@ -62,19 +54,79 @@
         position: relative;
         width: 960px;
         height: 600px;
+        background: #231f20;
+      }
+      #unity-canvas {
+        width: 960px;
+        height: 600px;
+        display: block;
+      }
+      #loading {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 300px;
+        transform: translate(-50%, -50%);
+        font-family: Monospace;
+        color: #fff;
+        text-align: center;
+      }
+      #loading-bar {
+        height: 12px;
+        margin-top: 10px;
+        border: 2px solid #fff;
+      }
+      #loading-fill {
+        width: 0;
+        height: 100%;
+        background: #fff;
       }
     </style>
   </head>
   <body class="main-container">
     <h1 class="title">Peggy Simulator 2020</h1>
     <div class="webgl-wrap">
-    <div class="webgl-content">
-      <div id="unityContainer" style="width: 960px; height: 600px;"></div>
+      <canvas id="unity-canvas" width="960" height="600" tabindex="-1"></canvas>
+      <div id="loading">
+        <div id="loading-text">Loading...</div>
+        <div id="loading-bar"><div id="loading-fill"></div></div>
+      </div>
     </div>
-  </div>
     <div class="foot">
-      <div class="full-button" onclick="unityInstance.SetFullscreen(1)"></div>
+      <button class="full-button" aria-label="Full screen" onclick="unityInstance && unityInstance.SetFullscreen(1)"></button>
       <p class="full-screen-text">Full Screen</p>
     </div>
+
+    <script src="WebGL/PeggySim/Build/PeggySim.loader.js"></script>
+    <script>
+      // File names follow the build's compression settings: Gzip with decompression
+      // fallback produces .unityweb files. Update these if those settings change.
+      var buildUrl = "WebGL/PeggySim/Build";
+      var unityInstance = null;
+      var loading = document.querySelector("#loading");
+
+      createUnityInstance(
+        document.querySelector("#unity-canvas"),
+        {
+          dataUrl: buildUrl + "/PeggySim.data.unityweb",
+          frameworkUrl: buildUrl + "/PeggySim.framework.js.unityweb",
+          codeUrl: buildUrl + "/PeggySim.wasm.unityweb",
+          streamingAssetsUrl: "WebGL/PeggySim/StreamingAssets",
+          companyName: "DefaultCompany",
+          productName: "PeggySim",
+          productVersion: "1.0",
+        },
+        function (progress) {
+          document.querySelector("#loading-fill").style.width = 100 * progress + "%";
+        }
+      )
+        .then(function (instance) {
+          unityInstance = instance;
+          loading.style.display = "none";
+        })
+        .catch(function (error) {
+          document.querySelector("#loading-text").textContent = "Couldn't load the game: " + error;
+        });
+    </script>
   </body>
 </html>

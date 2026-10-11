@@ -19,9 +19,12 @@ public static class UIBuilder
   private const string MenuScenePath = "Assets/Scenes/Menu.unity";
   private const string SplashScenePath = "Assets/Scenes/Splash.unity";
   private const string SplashImagePath = "Assets/Prefabs/splash/SplashImage.prefab";
-  private const string PeggyPrefabPath = "Assets/Peggy.prefab";
+  // Looked up by GUID so moving the prefab around the project doesn't break the builder
+  private static string PeggyPrefabPath => AssetDatabase.GUIDToAssetPath("88b3d7e63f7fdfaacbddd6169d61b195");
   private const string BurgerPrefabPath = "Assets/Prefabs/burger/Fortnut Borger.prefab";
+  private const string NeonGridShaderPath = "Assets/Shaders/NeonGrid.shader";
   private const string GrassMaterialPath = "Assets/Materials/MenuGrass.mat";
+  private const string GridFloorMaterialPath = "Assets/Materials/NeonGridFloor.mat";
   private const string IntroSoundPath = "Assets/Sounds/intro.mp3";
   private const string BungeePath = "Assets/Fonts/Bungee-Regular.ttf";
   private const string BungeeAssetPath = "Assets/Fonts/Bungee-Regular SDF.asset";
@@ -194,8 +197,8 @@ public static class UIBuilder
 
       RectTransform bars = Rect("Bars", abilities, new Vector2(0, 0), new Vector2(1, 0), new Vector2(0.5f, 0), new Vector2(0, 24), new Vector2(-56, 140));
       hud.abilityBars = bars.gameObject.AddComponent<CanvasGroup>();
-      hud.boostFill = Meter(bars, "Boost", "BOOST", "ALT", Mustard, 70);
-      hud.handbrakeFill = Meter(bars, "Handbrake", "HANDBRAKE", "CTRL", Sky, 0);
+      hud.boostFill = Meter(bars, "Boost", "BOOST", "W", Mustard, 70);
+      hud.handbrakeFill = Meter(bars, "Handbrake", "HANDBRAKE", "S", Sky, 0);
 
       RectTransform warning = Rect("LegsWarning", abilities, new Vector2(0, 1), new Vector2(1, 1), new Vector2(0.5f, 0), new Vector2(0, 12), new Vector2(0, 52));
       Panel(warning, Ketchup);
@@ -253,7 +256,7 @@ public static class UIBuilder
     const float column = 0.3f;
 
     // Title
-    RectTransform titleRect = Rect("Title", canvas.transform, new Vector2(column, 1), new Vector2(column, 1), new Vector2(0.5f, 1), new Vector2(0, -90), new Vector2(900, 300));
+    RectTransform titleRect = Rect("Title", canvas.transform, new Vector2(column, 1), new Vector2(column, 1), new Vector2(0.5f, 1), new Vector2(0, -130), new Vector2(900, 300));
     RawImage titleImage = titleRect.gameObject.AddComponent<RawImage>();
     titleImage.texture = title;
     titleImage.raycastTarget = false;
@@ -359,6 +362,19 @@ public static class UIBuilder
     grassCollider.convex = true;
     grass.GetComponent<MeshRenderer>().sharedMaterial = GrassMaterial();
 
+    // An endless synthwave floor under the turntable, scrolling towards the camera.
+    // Kept separate from the turntable so it doesn't spin, and solid so stray burgers land on it.
+    GameObject floor = GameObject.CreatePrimitive(PrimitiveType.Plane);
+    floor.name = "Neon Floor";
+    floor.transform.SetParent(stageObject.transform, false);
+    // Well below the camera's view at the turntable, so burgers that fall off drop out of
+    // shot; the grid still shows further back towards the horizon
+    floor.transform.localPosition = new Vector3(0f, -12f, 60f);
+    floor.transform.localScale = new Vector3(40f, 1f, 30f);
+    // No collider: burgers fall straight through, and MenuStage removes the oldest ones
+    Object.DestroyImmediate(floor.GetComponent<Collider>());
+    floor.GetComponent<MeshRenderer>().sharedMaterial = NeonGridMaterial(GridFloorMaterialPath, worldSpace: true, cellSize: 2.5f, scroll: 1.2f, fade: 140f);
+
     MenuStage stage = stageObject.AddComponent<MenuStage>();
     stage.peggyPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(PeggyPrefabPath);
     stage.burgerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(BurgerPrefabPath);
@@ -369,21 +385,45 @@ public static class UIBuilder
     Camera camera = FindRoot(scene, "Main Camera").GetComponent<Camera>();
     camera.transform.SetPositionAndRotation(new Vector3(0f, 3f, -11f), Quaternion.Euler(8f, 0f, 0f));
     camera.fieldOfView = 40f;
+    // Deep purple night instead of the default sky, so the neon grid pops
+    camera.clearFlags = CameraClearFlags.SolidColor;
+    camera.backgroundColor = new Color(0.07f, 0.01f, 0.12f);
     EditorUtility.SetDirty(camera.gameObject);
   }
 
   private static Material GrassMaterial()
   {
+    Shader lit = Shader.Find("Universal Render Pipeline/Lit");
     Material grass = AssetDatabase.LoadAssetAtPath<Material>(GrassMaterialPath);
     if (!grass)
     {
-      grass = new Material(Shader.Find("Standard"));
+      grass = new Material(lit);
       AssetDatabase.CreateAsset(grass, GrassMaterialPath);
     }
-    grass.color = new Color(0.36f, 0.64f, 0.25f);
-    grass.SetFloat("_Glossiness", 0.1f);
+    // Also moves a material left over from the built-in pipeline across to URP
+    grass.shader = lit;
+    grass.SetColor("_BaseColor", new Color(0.36f, 0.64f, 0.25f));
+    grass.SetFloat("_Smoothness", 0.1f);
     EditorUtility.SetDirty(grass);
     return grass;
+  }
+
+  private static Material NeonGridMaterial(string path, bool worldSpace, float cellSize, float scroll, float fade)
+  {
+    Shader shader = AssetDatabase.LoadAssetAtPath<Shader>(NeonGridShaderPath);
+    Material grid = AssetDatabase.LoadAssetAtPath<Material>(path);
+    if (!grid)
+    {
+      grid = new Material(shader);
+      AssetDatabase.CreateAsset(grid, path);
+    }
+    grid.shader = shader;
+    grid.SetFloat("_WorldSpace", worldSpace ? 1f : 0f);
+    grid.SetFloat("_CellSize", cellSize);
+    grid.SetFloat("_ScrollSpeed", scroll);
+    grid.SetFloat("_FadeDistance", fade);
+    EditorUtility.SetDirty(grid);
+    return grid;
   }
 
   private static string HelpText()
@@ -394,11 +434,11 @@ public static class UIBuilder
       heading + "GOAL" + end + "\n" +
       "Peggy always runs forward, like in Snake. Eat burgers to grow longer, and don't run into your own body.\n\n" +
       heading + "CONTROLS" + end + "\n" +
-      "Steer<pos=45%><b>A / D</b>  or  <b>Arrow keys</b>\n" +
+      "Steer<pos=45%><b>A / D</b>  or  <b>Left / Right</b>\n" +
+      "Boost<pos=45%><b>W</b>  or  <b>Up</b>  or  <b>Shift</b>\n" +
+      "Handbrake (sharp turns)<pos=45%><b>S</b>  or  <b>Down</b>\n" +
       "Jump<pos=45%><b>Space</b>\n" +
-      "Handbrake (sharp turns)<pos=45%><b>Ctrl</b>  or  <b>Left mouse</b>\n" +
-      "Boost<pos=45%><b>Alt</b>  or  <b>Right mouse</b>\n" +
-      "Gamepad<pos=45%>Stick to steer, <b>A</b> handbrake, <b>B</b> boost, <b>Y</b> jump\n\n" +
+      "Gamepad<pos=45%>Stick to steer, <b>RT</b> boost, <b>LT</b> handbrake, <b>A</b> jump\n\n" +
       heading + "ABILITIES" + end + "\n" +
       "Handbrake and boost only work while Peggy has her legs. Lose them and you'll have to run back and grab them.";
   }

@@ -15,6 +15,27 @@ public class MenuStage : MonoBehaviour
   public Collider ground;
   [Tooltip("Degrees per second")]
   public float spinSpeed = 20f;
+  [Tooltip("Strength of the CRT scanlines and curve on the menu. The effect is off outside the menu")]
+  [Range(0f, 1f)]
+  public float crtStrength = 1f;
+
+  private static readonly int CRTId = Shader.PropertyToID("_PeggyCRT");
+
+  private void OnEnable()
+  {
+    Shader.SetGlobalFloat(CRTId, crtStrength);
+  }
+
+  private void OnDisable()
+  {
+    Shader.SetGlobalFloat(CRTId, 0f);
+  }
+
+  private void OnValidate()
+  {
+    if (isActiveAndEnabled)
+      Shader.SetGlobalFloat(CRTId, crtStrength);
+  }
   [Tooltip("Which way Peggy faces on the turntable, in degrees")]
   public float peggyYaw = 150f;
 
@@ -90,13 +111,24 @@ public class MenuStage : MonoBehaviour
       }
     }
 
+    // ButtScript normally hides the "legs dropped here" marker, its first child, while attached
+    foreach (Transform child in peggy.GetComponentsInChildren<Transform>(true))
+    {
+      if (child.CompareTag("Butt") && child.childCount > 0)
+      {
+        child.GetChild(0).gameObject.SetActive(false);
+      }
+    }
+
     Transform t = peggy.transform;
     t.SetParent(turntable.transform, false);
     t.localPosition = Vector3.zero;
     t.localRotation = Quaternion.Euler(0f, peggyYaw, 0f);
 
-    // Stand her on the grass, centred on the turntable
-    Bounds bounds = RendererBounds(peggy);
+    // Stand her on the grass, centred on the turntable. Use her solid colliders rather than
+    // her meshes, since those are what she stands on in the game.
+    Physics.SyncTransforms();
+    Bounds bounds = ColliderBounds(peggy);
     Vector3 centre = turntable.position;
     t.position += new Vector3(centre.x - bounds.center.x, ground.bounds.max.y - bounds.min.y, centre.z - bounds.center.z);
   }
@@ -152,6 +184,25 @@ public class MenuStage : MonoBehaviour
       DestroyImmediate(body);
     }
     return prop;
+  }
+
+  private static Bounds ColliderBounds(GameObject root)
+  {
+    Bounds bounds = new Bounds(root.transform.position, Vector3.zero);
+    bool first = true;
+    foreach (Collider collider in root.GetComponentsInChildren<Collider>())
+    {
+      if (first)
+      {
+        bounds = collider.bounds;
+        first = false;
+      }
+      else
+      {
+        bounds.Encapsulate(collider.bounds);
+      }
+    }
+    return bounds;
   }
 
   private static Bounds RendererBounds(GameObject root)

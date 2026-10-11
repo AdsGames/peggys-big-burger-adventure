@@ -10,12 +10,15 @@ public class Segment : MonoBehaviour
   private Rigidbody body;
 
   public static int AliveCount => alive.Count;
+  public static IReadOnlyList<Segment> Alive => alive;
   public Rigidbody Body => body;
+  public Renderer Renderer { get; private set; }
 
   private void Awake()
   {
     joint = GetComponent<HingeJoint>();
     body = GetComponent<Rigidbody>();
+    Renderer = GetComponent<Renderer>();
     if (CompareTag("Segment")) {
       alive.Add(this);
     }
@@ -63,6 +66,29 @@ public class Segment : MonoBehaviour
         }
       }
     }
+  }
+
+  /// <summary>
+  /// The real end of the chain, found by walking segment to segment from the head.
+  /// Unlike FindTail, a stray segment that isn't connected to the head can never be picked.
+  /// </summary>
+  public static Segment ChainTail(Rigidbody head)
+  {
+    Dictionary<Rigidbody, Segment> behind = new Dictionary<Rigidbody, Segment>();
+    foreach (Segment segment in alive) {
+      if (segment.joint && segment.joint.connectedBody) {
+        behind[segment.joint.connectedBody] = segment;
+      }
+    }
+
+    Segment tail = null;
+    Rigidbody current = head;
+    // Bounded by the segment count, so a broken loop can't hang the game
+    for (int i = 0; i <= alive.Count && behind.TryGetValue(current, out Segment next); i++) {
+      tail = next;
+      current = next.body;
+    }
+    return tail;
   }
 
   /// <summary>

@@ -25,10 +25,10 @@ public class HeadCollider : MonoBehaviour
     if (other.CompareTag("Segment") && other.name != "FirstBody")
     {
       parent.breakTimer = 0;
-      GameObject new_particle = Instantiate(explodeParticle);
-      new_particle.transform.position = other.transform.position;
+      Effects.PlayOnce(explodeParticle, other.transform.position);
       other.GetComponent<HingeJoint>().connectedBody = null;
       Segment.PruneDetached();
+      TripController.Pulse(1.5f);
 
       if (butt.connected && soundManager)
       {
@@ -38,9 +38,9 @@ public class HeadCollider : MonoBehaviour
 
     if (other.CompareTag("Food"))
     {
-      GameObject new_particle = Instantiate(itemParticle);
-      new_particle.transform.position = other.transform.position;
+      Effects.PlayOnce(itemParticle, other.transform.position);
       parent.AddSegment();
+      TripController.Pulse();
       Destroy(other.gameObject);
 
       if (soundManager)
