@@ -1,27 +1,18 @@
 # Unity stuffs
-*/[Ll]ibrary/
-*/[Tt]emp/*
-*/[Oo]bj/*
-*/[Bb]uild/*
-*/[Bb]uilds/*
-*/[Ll]ogs/*
-*/Packages/manifest.json
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+MemoryCaptures/
 */Assets/AssetStoreTools*
 
 *.lighting
 
 # Android build data
 .gradle/*
-
-# Editor version number
-PeggySim/ProjectSettings/ProjectVersion.txt
-
-# Other unity properties
-PeggySim/ProjectSettings/TimelineSettings.asset
-PeggySim/ProjectSettings/UnityConnectSettings.asset
-PeggySim/ProjectSettings/VersionControlSettings.asset
-PeggySim/UpgradeLog.htm  
-
 
 # Visual Studio cache directory
 .vs/
@@ -32,6 +23,7 @@ ExportedObj/
 *.csproj
 *.unityproj
 *.sln
+*.slnx
 *.suo
 *.tmp
 *.user

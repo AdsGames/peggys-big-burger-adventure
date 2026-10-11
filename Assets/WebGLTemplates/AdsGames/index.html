@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{{ PRODUCT_NAME }}}</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        overflow: hidden;
+        background: #000;
+      }
+      /* Fills the page, or the iframe when embedded on A.D.S. Games. Unity matches its
+         render size to the canvas, and the UI scales to fit. */
+      #canvas {
+        display: block;
+        width: 100vw;
+        height: 100vh;
+        outline: none;
+      }
+      #status {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 8px 16px;
+        border-radius: 4px;
+        background: rgba(0, 0, 0, 0.6);
+        color: #ccc;
+        font-family: sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" tabindex="-1" oncontextmenu="event.preventDefault()"></canvas>
+    <div id="status">Loading…</div>
+
+    <script>
+      var canvas = document.querySelector("#canvas");
+      // Not "status": a global by that name is window.status, which only holds strings
+      var statusText = document.querySelector("#status");
+
+      // When embedded, the host page shows loading progress, so report to it instead
+      var framed = window.parent !== window;
+      statusText.hidden = framed;
+
+      function notifyParent(message) {
+        if (framed) {
+          window.parent.postMessage(message, "*");
+        }
+      }
+
+      function setStatus(text) {
+        statusText.textContent = text;
+        statusText.hidden = framed || !text;
+        notifyParent({ type: "asw:status", text: text });
+      }
+
+      // Stop the arrow keys, Tab and Space from scrolling the host page
+      window.addEventListener("keydown", function (event) {
+        if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Tab", " "].indexOf(event.key) !== -1) {
+          event.preventDefault();
+        }
+      });
+      canvas.addEventListener("pointerdown", function () {
+        canvas.focus();
+      });
+
+      var buildUrl = "Build";
+      var config = {
+        arguments: [],
+        dataUrl: buildUrl + "/{{{ DATA_FILENAME }}}",
+        frameworkUrl: buildUrl + "/{{{ FRAMEWORK_FILENAME }}}",
+#if USE_THREADS
+        workerUrl: buildUrl + "/{{{ WORKER_FILENAME }}}",
+#endif
+#if USE_WASM
+        codeUrl: buildUrl + "/{{{ CODE_FILENAME }}}",
+#endif
+#if MEMORY_FILENAME
+        memoryUrl: buildUrl + "/{{{ MEMORY_FILENAME }}}",
+#endif
+#if SYMBOLS_FILENAME
+        symbolsUrl: buildUrl + "/{{{ SYMBOLS_FILENAME }}}",
+#endif
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: {{{ JSON.stringify(COMPANY_NAME) }}},
+        productName: {{{ JSON.stringify(PRODUCT_NAME) }}},
+        productVersion: {{{ JSON.stringify(PRODUCT_VERSION) }}},
+        // Unity's warnings and errors go to the status line rather than a banner
+        showBanner: function (message, type) {
+          if (type === "error") {
+            setStatus(message);
+          } else {
+            console.warn(message);
+          }
+        },
+      };
+
+      var script = document.createElement("script");
+      script.src = buildUrl + "/{{{ LOADER_FILENAME }}}";
+      script.onload = function () {
+        createUnityInstance(canvas, config, function (progress) {
+          setStatus("Loading… " + Math.round(progress * 100) + "%");
+        })
+          .then(function () {
+            setStatus("");
+            notifyParent({ type: "asw:ready" });
+            canvas.focus();
+          })
+          .catch(function (error) {
+            setStatus("Couldn't start the game: " + error);
+          });
+      };
+      document.body.appendChild(script);
+    </script>
+  </body>
+</html>
