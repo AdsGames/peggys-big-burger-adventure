@@ -3,6 +3,7 @@
 public class HeadCollider : MonoBehaviour
 {
   private Peggy parent;
+  private ButtScript butt;
   public GameObject explodeParticle;
   public GameObject itemParticle;
   public SoundEffectManager soundManager;
@@ -10,44 +11,53 @@ public class HeadCollider : MonoBehaviour
   private void Start()
   {
     parent = transform.parent.GetComponent<Peggy>();
+    butt = GameObject.FindGameObjectWithTag("Butt").GetComponent<ButtScript>();
   }
 
   private void OnTriggerEnter(Collider other)
   {
-    if (!other || !parent) {
+    if (!other || !parent)
+    {
       Debug.Log("Other or parent is null!");
       return;
     }
 
-    if (other.tag == "Segment" && other.name != "FirstBody") {
+    if (other.tag == "Segment" && other.name != "FirstBody")
+    {
       parent.breakTimer = 0;
       GameObject new_particle = Instantiate(explodeParticle);
       new_particle.transform.position = other.transform.position;
       other.GetComponent<HingeJoint>().connectedBody = null;
+      Segment.PruneDetached();
 
-      if (GameObject.FindGameObjectWithTag("Butt").GetComponent<ButtScript>().connected) {
+      if (butt.connected && soundManager)
+      {
         soundManager.playLegsLost();
       }
     }
 
-    if (other.tag == "Food") {
+    if (other.tag == "Food")
+    {
       GameObject new_particle = Instantiate(itemParticle);
       new_particle.transform.position = other.transform.position;
       parent.AddSegment();
       Destroy(other.gameObject);
 
-      if (soundManager) {
+      if (soundManager)
+      {
         soundManager.playEat();
-      } else {
+      }
+      else
+      {
         Debug.Log("No sound manager");
       }
     }
 
-    if (other.tag == "Butt") {
-      if (!other.gameObject.GetComponent<ButtScript>().connected) {
-        other.gameObject.transform.localScale = new Vector3(3.91f, 3.91f, 3.91f);
-        print("got ur butt");
-        parent.handleButtCollision(other);
+    if (other.tag == "Butt")
+    {
+      if (!other.gameObject.GetComponent<ButtScript>().connected)
+      {
+        parent.HandleButtCollision(other);
       }
     }
   }

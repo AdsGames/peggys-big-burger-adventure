@@ -9,6 +9,8 @@ public class FollowCam : MonoBehaviour
 
   private GameObject player;
   private Camera cam;
+  private Rigidbody playerBody;
+  private Movement playerMovement;
 
   private GameObject cameraGhost;
   private GameInfo info;
@@ -26,7 +28,9 @@ public class FollowCam : MonoBehaviour
   {
     cameraGhost = GameObject.FindGameObjectWithTag("CameraGhost");
     player = GameObject.FindGameObjectWithTag("Head");
-    info = GameObject.FindGameObjectWithTag("GameInfo").GetComponent<GameInfo>(); ;
+    playerBody = player.GetComponent<Rigidbody>();
+    playerMovement = player.GetComponent<Movement>();
+    info = GameObject.FindGameObjectWithTag("GameInfo").GetComponent<GameInfo>();
     cam = GetComponent<Camera>();
   }
 
@@ -44,7 +48,7 @@ public class FollowCam : MonoBehaviour
       speed
     );
 
-    cam.fieldOfView = Mathf.Clamp(Mathf.Lerp(cam.fieldOfView, (player.GetComponent<Rigidbody>().linearVelocity.magnitude * FOVFactor) + baseFov + (player.GetComponent<Movement>().isBoosting ? 10:0), 0.2f), 45, 85);
+    cam.fieldOfView = Mathf.Clamp(Mathf.Lerp(cam.fieldOfView, (playerBody.linearVelocity.magnitude * FOVFactor) + baseFov + (playerMovement.isBoosting ? 10:0), 0.2f), 45, 85);
     cameraGhost.transform.localPosition = new Vector3(0, height, initialOffset + ((info.getSegments() - 1) * scaleFactor));
     transform.eulerAngles = new Vector3(cameraGhost.transform.eulerAngles.x, cameraGhost.transform.eulerAngles.y, cameraGhost.transform.eulerAngles.z);
   }
