@@ -14,6 +14,8 @@ public class Intro : MonoBehaviour
   [Tooltip("Voice lines for 3, 2, 1 and GO, in that order")]
   [FormerlySerializedAs("audio")]
   public List<AudioClip> voiceClips = new List<AudioClip>();
+  [Tooltip("Background music, held back until GO. Falls back to an object named MainMusic if empty")]
+  public AudioSource music;
   public Color[] colours =
   {
     new Color(0.902f, 0.224f, 0.275f),
@@ -31,8 +33,11 @@ public class Intro : MonoBehaviour
     label.alpha = 0f;
 
     Movement movement = GameObject.FindGameObjectWithTag("Head").GetComponent<Movement>();
-    GameObject musicObject = GameObject.Find("MainMusic");
-    AudioSource music = musicObject ? musicObject.GetComponent<AudioSource>() : null;
+    if (!music)
+    {
+      GameObject musicObject = GameObject.Find("MainMusic");
+      music = musicObject ? musicObject.GetComponent<AudioSource>() : null;
+    }
     GameObject soundObject = GameObject.FindGameObjectWithTag("SoundEffectManager");
     SoundEffectManager sounds = soundObject ? soundObject.GetComponent<SoundEffectManager>() : null;
 

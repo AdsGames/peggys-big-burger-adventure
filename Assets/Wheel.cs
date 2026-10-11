@@ -1,23 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Wheel : MonoBehaviour
 {
-
-    public WheelCollider collider;
+    [FormerlySerializedAs("collider")]
+    public WheelCollider wheelCollider;
 
     void Start()
     {
-        collider = GetComponent<WheelCollider>();
+        wheelCollider = GetComponent<WheelCollider>();
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Segment" || collision.gameObject.tag == "Head")
+        if (collision.gameObject.CompareTag("Segment") || collision.gameObject.CompareTag("Head"))
         {
-            Physics.IgnoreCollision(collision.collider, collider);
+            Physics.IgnoreCollision(collision.collider, wheelCollider);
         }
-
     }
 }

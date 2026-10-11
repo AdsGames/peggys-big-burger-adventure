@@ -1,43 +1,57 @@
-﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ButtScript : MonoBehaviour
 {
     private HingeJoint joint;
     private GameObject icon;
-    private SphereCollider s;
-    public bool connected=true;
-    // Start is called before the first frame update
+    private Rigidbody lastConnectedBody;
+    public bool connected = true;
+
     void Start()
     {
-        s = GetComponent<SphereCollider>();
         joint = GetComponent<HingeJoint>();
         icon = transform.GetChild(0).gameObject;
+        Refresh();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        icon.transform.eulerAngles = new Vector3 (0,0,0);
+        icon.transform.eulerAngles = Vector3.zero;
 
-
-        if(joint.connectedBody==null || joint.connectedBody.gameObject.tag!="Segment"){
-            if(connected){
-                icon.SetActive(true);
-                transform.position = new Vector3(transform.position.x,transform.position.y+5,transform.position.z);
-
-                transform.localScale = new Vector3(3*3.91f,3*3.91f,3*3.91f);
-            }
-            connected=false;
-
-        }else{
-            connected=true;
-            // this should get set at reattachement pls
-            //transform.localScale = new Vector3(3.91f,3.91f,3.91f);
-            icon.SetActive(false);
-            
+        // Only re-check the connection when the joint actually points somewhere new
+        if (joint.connectedBody != lastConnectedBody)
+        {
+            Refresh();
         }
-        
+        // A segment that dies keeps its Rigidbody but changes tag, so watch for that too
+        else if (connected && !IsAttachedToSegment())
+        {
+            Refresh();
+        }
+    }
+
+    private bool IsAttachedToSegment()
+    {
+        return joint.connectedBody != null && joint.connectedBody.CompareTag("Segment");
+    }
+
+    private void Refresh()
+    {
+        lastConnectedBody = joint.connectedBody;
+        bool nowConnected = IsAttachedToSegment();
+
+        if (connected && !nowConnected)
+        {
+            // Just fell off: pop up and grow so the player can spot it
+            icon.SetActive(true);
+            transform.position += Vector3.up * 5f;
+            transform.localScale = Vector3.one * (3f * 3.91f);
+        }
+        else if (nowConnected)
+        {
+            icon.SetActive(false);
+        }
+
+        connected = nowConnected;
     }
 }

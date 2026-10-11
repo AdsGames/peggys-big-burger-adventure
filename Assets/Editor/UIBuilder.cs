@@ -19,6 +19,10 @@ public static class UIBuilder
   private const string MenuScenePath = "Assets/Scenes/Menu.unity";
   private const string SplashScenePath = "Assets/Scenes/Splash.unity";
   private const string SplashImagePath = "Assets/Prefabs/splash/SplashImage.prefab";
+  private const string PeggyPrefabPath = "Assets/Peggy.prefab";
+  private const string BurgerPrefabPath = "Assets/Prefabs/burger/Fortnut Borger.prefab";
+  private const string GrassMaterialPath = "Assets/Materials/MenuGrass.mat";
+  private const string IntroSoundPath = "Assets/Sounds/intro.mp3";
   private const string BungeePath = "Assets/Fonts/Bungee-Regular.ttf";
   private const string BungeeAssetPath = "Assets/Fonts/Bungee-Regular SDF.asset";
   private const string ShadowMaterialPath = "Assets/Fonts/Bungee-Regular SDF Shadow.mat";
@@ -245,8 +249,11 @@ public static class UIBuilder
     ClearChildren(canvas.transform);
     ConfigureCanvas(canvas);
 
+    // Everything sits in a left-hand column, leaving the right for the turntable stage
+    const float column = 0.3f;
+
     // Title
-    RectTransform titleRect = Rect("Title", canvas.transform, new Vector2(0.5f, 1), new Vector2(0.5f, 1), new Vector2(0.5f, 1), new Vector2(0, -90), new Vector2(900, 300));
+    RectTransform titleRect = Rect("Title", canvas.transform, new Vector2(column, 1), new Vector2(column, 1), new Vector2(0.5f, 1), new Vector2(0, -90), new Vector2(900, 300));
     RawImage titleImage = titleRect.gameObject.AddComponent<RawImage>();
     titleImage.texture = title;
     titleImage.raycastTarget = false;
@@ -256,10 +263,15 @@ public static class UIBuilder
     }
 
     // Buttons
-    RectTransform buttons = Rect("Buttons", canvas.transform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 1), new Vector2(0, 20), new Vector2(460, 400));
+    RectTransform buttons = Rect("Buttons", canvas.transform, new Vector2(column, 0.5f), new Vector2(column, 0.5f), new Vector2(0.5f, 1), new Vector2(0, 20), new Vector2(460, 400));
     Button start = MakeButton("Start Game", buttons, "PLAY", new Vector2(460, 110), 0, Mustard, Ink, 52);
     Button help = MakeButton("Open Help", buttons, "HOW TO PLAY", new Vector2(460, 86), -136, Card, Cream, 34);
     Button about = MakeButton("Open About", buttons, "ABOUT", new Vector2(460, 86), -240, Card, Cream, 34);
+
+    // Best length, filled in by MenuStartController
+    TextMeshProUGUI best = Label(Rect("Best", buttons, new Vector2(0.5f, 1), new Vector2(0.5f, 1), new Vector2(0.5f, 1), new Vector2(0, -360), new Vector2(800, 50)),
+      "", 30, Mustard, TextAlignmentOptions.Center, display, shadowMaterial);
+    best.characterSpacing = 4;
 
     // Dialogs
     Button helpClose;
@@ -275,6 +287,19 @@ public static class UIBuilder
       starter = controller.AddComponent<MenuStartController>();
     }
     starter.startButton = start;
+    starter.bestText = best;
+    EditorUtility.SetDirty(starter);
+
+    // Intro jingle, played once when the menu opens
+    AudioSource jingle = controller.GetComponent<AudioSource>();
+    if (!jingle)
+    {
+      jingle = controller.AddComponent<AudioSource>();
+    }
+    jingle.clip = AssetDatabase.LoadAssetAtPath<AudioClip>(IntroSoundPath);
+    jingle.playOnAwake = true;
+    jingle.loop = false;
+    jingle.spatialBlend = 0f;
 
     MenuDialogController[] dialogs = controller.GetComponents<MenuDialogController>();
     for (int i = dialogs.Length; i < 2; i++)
@@ -284,6 +309,8 @@ public static class UIBuilder
     dialogs = controller.GetComponents<MenuDialogController>();
     SetDialog(dialogs[0], aboutDialog, about, aboutClose);
     SetDialog(dialogs[1], helpDialog, help, helpClose);
+
+    BuildMenuStage(scene);
 
     EditorSceneManager.MarkSceneDirty(scene);
     EditorSceneManager.SaveScene(scene);
@@ -295,6 +322,68 @@ public static class UIBuilder
     dialog.openButton = open;
     dialog.closeButton = close;
     EditorUtility.SetDirty(dialog);
+  }
+
+  /// <summary>
+  /// Peggy spinning on a patch of grass while burgers rain down, to the right of the menu.
+  /// Replaces the old static Peggy and burger props.
+  /// </summary>
+  private static void BuildMenuStage(Scene scene)
+  {
+    foreach (GameObject old in scene.GetRootGameObjects())
+    {
+      if (old.name == "Menu Stage" || old.name == "Peggy" || old.name == "Fortnut Borger")
+      {
+        Object.DestroyImmediate(old);
+      }
+    }
+
+    GameObject stageObject = new GameObject("Menu Stage");
+    SceneManager.MoveGameObjectToScene(stageObject, scene);
+    stageObject.transform.position = new Vector3(3f, 0f, 0f);
+
+    GameObject turntableObject = new GameObject("Turntable");
+    turntableObject.transform.SetParent(stageObject.transform, false);
+    Rigidbody turntable = turntableObject.AddComponent<Rigidbody>();
+    turntable.isKinematic = true;
+    turntable.interpolation = RigidbodyInterpolation.Interpolate;
+
+    // A flat disc whose top surface sits at the stage's origin
+    GameObject grass = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+    grass.name = "Grass";
+    grass.transform.SetParent(turntableObject.transform, false);
+    grass.transform.localPosition = new Vector3(0f, -0.15f, 0f);
+    grass.transform.localScale = new Vector3(6f, 0.15f, 6f);
+    Object.DestroyImmediate(grass.GetComponent<Collider>());
+    MeshCollider grassCollider = grass.AddComponent<MeshCollider>();
+    grassCollider.convex = true;
+    grass.GetComponent<MeshRenderer>().sharedMaterial = GrassMaterial();
+
+    MenuStage stage = stageObject.AddComponent<MenuStage>();
+    stage.peggyPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(PeggyPrefabPath);
+    stage.burgerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(BurgerPrefabPath);
+    stage.turntable = turntable;
+    stage.ground = grassCollider;
+
+    // Look slightly down at the stage, which lands right of centre
+    Camera camera = FindRoot(scene, "Main Camera").GetComponent<Camera>();
+    camera.transform.SetPositionAndRotation(new Vector3(0f, 3f, -11f), Quaternion.Euler(8f, 0f, 0f));
+    camera.fieldOfView = 40f;
+    EditorUtility.SetDirty(camera.gameObject);
+  }
+
+  private static Material GrassMaterial()
+  {
+    Material grass = AssetDatabase.LoadAssetAtPath<Material>(GrassMaterialPath);
+    if (!grass)
+    {
+      grass = new Material(Shader.Find("Standard"));
+      AssetDatabase.CreateAsset(grass, GrassMaterialPath);
+    }
+    grass.color = new Color(0.36f, 0.64f, 0.25f);
+    grass.SetFloat("_Glossiness", 0.1f);
+    EditorUtility.SetDirty(grass);
+    return grass;
   }
 
   private static string HelpText()
@@ -348,6 +437,9 @@ public static class UIBuilder
     close = closeRect.gameObject.AddComponent<Button>();
     close.targetGraphic = closeImage;
     close.colors = Tint(Ketchup);
+    // Arrow keys mustn't wander off to the menu buttons hidden behind the dialog
+    close.navigation = new Navigation { mode = Navigation.Mode.None };
+    closeRect.gameObject.AddComponent<SelectedPop>();
     Label(Stretch("Text", closeRect, 0, 0, 0, 4), "X", 34, Cream, TextAlignmentOptions.Center, display);
 
     overlay.gameObject.SetActive(false);
@@ -362,6 +454,7 @@ public static class UIBuilder
     Button button = rect.gameObject.AddComponent<Button>();
     button.targetGraphic = image;
     button.colors = Tint(background);
+    rect.gameObject.AddComponent<SelectedPop>();
     Label(Stretch("Text", rect, 0, 0, 0, 4), text, fontSize, foreground, TextAlignmentOptions.Center, display).characterSpacing = 4;
     return button;
   }
@@ -437,7 +530,7 @@ public static class UIBuilder
   /// </summary>
   private static void UpgradeEventSystems()
   {
-    foreach (EventSystem system in Object.FindObjectsByType<EventSystem>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+    foreach (EventSystem system in Object.FindObjectsByType<EventSystem>(FindObjectsInactive.Include))
     {
       foreach (StandaloneInputModule old in system.GetComponents<StandaloneInputModule>())
       {

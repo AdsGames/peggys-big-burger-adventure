@@ -37,12 +37,17 @@ public class GameHUD : MonoBehaviour
     movement = headObject.GetComponent<Movement>();
     head = headObject.GetComponent<Rigidbody>();
     butt = GameObject.FindGameObjectWithTag("Butt").GetComponent<ButtScript>();
+    best = BestLength.Value;
   }
 
   private void Update()
   {
     int length = Segment.AliveCount;
-    best = Mathf.Max(best, length);
+    if (length > best)
+    {
+      best = length;
+      BestLength.Submit(best);
+    }
     lengthText.text = length.ToString();
     bestText.text = best.ToString();
 

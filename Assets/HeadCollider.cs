@@ -22,7 +22,7 @@ public class HeadCollider : MonoBehaviour
       return;
     }
 
-    if (other.tag == "Segment" && other.name != "FirstBody")
+    if (other.CompareTag("Segment") && other.name != "FirstBody")
     {
       parent.breakTimer = 0;
       GameObject new_particle = Instantiate(explodeParticle);
@@ -36,7 +36,7 @@ public class HeadCollider : MonoBehaviour
       }
     }
 
-    if (other.tag == "Food")
+    if (other.CompareTag("Food"))
     {
       GameObject new_particle = Instantiate(itemParticle);
       new_particle.transform.position = other.transform.position;
@@ -53,7 +53,7 @@ public class HeadCollider : MonoBehaviour
       }
     }
 
-    if (other.tag == "Butt")
+    if (other.CompareTag("Butt"))
     {
       if (!other.gameObject.GetComponent<ButtScript>().connected)
       {
