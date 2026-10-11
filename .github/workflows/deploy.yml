@@ -78,25 +78,19 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Checkout pages assets
-        uses: actions/checkout@v7
-        with:
-          sparse-checkout: pages
-
       - uses: actions/download-artifact@v7
         with:
           name: build-WebGL
 
-      # The WebGL build lands in WebGL/PeggySim, with the wrapper page from pages/ at the root
-      - name: Assemble site
+      # The site is the WebGL build itself, the same page A.D.S. Games serves
+      - name: Unpack build
         run: |
-          mkdir -p site/WebGL
-          tar -xf build-WebGL.tar -C site/WebGL
-          cp -r pages/* site/
+          mkdir site
+          tar -xf build-WebGL.tar -C site
 
       - uses: actions/upload-pages-artifact@v5
         with:
-          path: site
+          path: site/PeggySim
 
       - name: Deploy to GitHub Pages
         id: deployment
