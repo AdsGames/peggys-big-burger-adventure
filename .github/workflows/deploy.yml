@@ -32,11 +32,11 @@ jobs:
           - StandaloneOSX
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           lfs: true
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         with:
           path: Library
           key: Library-${{ matrix.targetPlatform }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
@@ -59,7 +59,7 @@ jobs:
       - name: Pack build
         run: tar -cf build-${{ matrix.targetPlatform }}.tar -C build/${{ matrix.targetPlatform }} .
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: build-${{ matrix.targetPlatform }}
           path: build-${{ matrix.targetPlatform }}.tar
@@ -79,11 +79,11 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout pages assets
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           sparse-checkout: pages
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v7
         with:
           name: build-WebGL
 
@@ -94,13 +94,13 @@ jobs:
           tar -xf build-WebGL.tar -C site/WebGL
           cp -r pages/* site/
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: site
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
   adsgames:
     name: Deploy ${{ matrix.platform }} to A.D.S. Games
@@ -128,7 +128,7 @@ jobs:
             platform: MAC
             dir: ""
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v7
         with:
           name: build-${{ matrix.targetPlatform }}
 
